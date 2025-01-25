@@ -45,7 +45,7 @@ const NavMenuList = ({
                                     Sign out
                                 </Button> */}
                                 <Button
-                                    className='btn bg-[#fe612d] text-[#fff] hover:bg-[rgba(254,97,45,0.8)] text-[0.8rem] uppercase font-semibold px-3 py-1 w-fit'
+                                    className='btn bg-[#00bcd4] text-[#fff] hover:bg-[rgba(0,188,212,0.8)] text-[0.8rem] uppercase font-semibold px-3 py-1 w-fit'
                                 >
                                     Sign in
                                 </Button>
