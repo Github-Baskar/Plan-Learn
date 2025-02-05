@@ -23,8 +23,8 @@ const NavMenuList = ({
                                 onClick={onClick}
                             >
                                 <NavLink
-                                    to={`/${menu.path === "home" ? "" : menu.path}`}
-                                    className={`nav-link flex items-center md:justify-end md:text-[0.9rem] lg:text-[1rem] py-3 md:px-4 md:py-0`}
+                                    to={menu.path}
+                                    className={`nav-link flex items-center md:justify-end md:text-[0.9rem] lg:text-[1rem] hover:text-[#00bcd4] py-3 md:px-4 md:py-0`}
                                 >
                                     {menu.name}
                                 </NavLink>
@@ -45,7 +45,7 @@ const NavMenuList = ({
                                     Sign out
                                 </Button> */}
                                 <Button
-                                    className='btn bg-[#fe612d] text-[#fff] hover:bg-[rgba(254,97,45,0.8)] text-[0.8rem] uppercase font-semibold px-3 py-1 w-fit'
+                                    className='btn bg-[#00bcd4] text-[#fff] hover:bg-[rgba(0,188,212,0.8)] text-[0.8rem] uppercase font-semibold px-3 py-1 w-fit'
                                 >
                                     Sign in
                                 </Button>

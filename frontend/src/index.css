@@ -3,5 +3,23 @@
 @tailwind utilities;
 
 .active{
-    color: #fe612d;
+    color: #00bcd4;
+}
+
+.ant-select .ant-select-selector .ant-select-selection-wrap{
+    align-self: unset !important;
+    padding: 10px 0px 10px 10px;
+}
+
+.ant-select .ant-select-selector{
+    border: none !important;
+    box-shadow: none !important;
+}
+.ant-select:focus-visible, .ant-select .ant-select-selector:focus-visible{
+    outline: none !important;
+}
+
+.ant-select-open {
+    outline: 1px solid #000 !important;
+    border: none !important;
 }

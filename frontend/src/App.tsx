@@ -1,7 +1,8 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MasterLayout from './MasterLayout';
 import HomePage from './components/pageComponents/HomePage';
-import BookmarksPage from './components/pageComponents/BookmarksPage';
+import MyPlannerPage from './components/pageComponents/MyPlannerPage';
+import AddPlannerPage from './components/pageComponents/AddPlannerPage';
 
 function App() {
     return (
@@ -9,8 +10,8 @@ function App() {
             <Routes>
                 <Route path='/' element={<MasterLayout />}>
                     <Route index element={<HomePage />} />
-                    <Route path='/home' element={<Navigate to='/' />} />
-                    <Route path='/bookmarks' element={<BookmarksPage />} />
+                    <Route path='/create' element={<AddPlannerPage />} />
+                    <Route path='/my-plans' element={<MyPlannerPage />} />
                 </Route>
             </Routes>
         </Router>

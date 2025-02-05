@@ -8,9 +8,9 @@ import Button from "../baseComponents/Button";
 const Header = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     return (
-        <nav className="flex justify-center items-center sticky top-0 z-[100] h-[80px] shadow-md">
-            <div className="header-content flex justify-between items-center w-[100%] md:w-[80%] p-4 md:p-0">
-                <h1 className='text-[0.8rem] sm:text-[1rem] lg:text-[1.5rem] uppercase tracking-[3px] font-[800]'>Career Planner</h1>
+        <nav className="flex justify-center items-center sticky top-0 z-[100] h-[80px] shadow-md bg-white">
+            <div className="header-content flex justify-between items-center w-[100%] md:w-[90%] lg:w-[80%] p-4 md:p-0">
+                <h1 className='text-[0.8rem] sm:text-[1rem] lg:text-[1.5rem] uppercase tracking-[3px] font-[800] text-[#00bcd4]'>Plan & Learn</h1>
                 <div className="hidden md:block">
                     <NavMenuList />
                 </div>
@@ -22,7 +22,7 @@ const Header = () => {
                 </button>
                 <AntDrawer
                     title={
-                        <h1 className='text-[1rem] uppercase tracking-[3px] font-[800] my-3'>Career Planner</h1>
+                        <h1 className='text-[1rem] uppercase tracking-[3px] font-[800] my-3'>Plan & Learn</h1>
                     }
                     placement={'right'}
                     closable={false}
@@ -49,7 +49,7 @@ const Header = () => {
                                 Sign out
                             </Button> */}
                             <Button
-                                className='btn bg-[#fe612d] text-[#fff] hover:bg-[rgba(254,97,45,0.8)] text-[0.8rem] uppercase font-semibold px-3 py-1 w-fit'
+                                className='btn bg-[#00bcd4] text-[#fff] hover:bg-[rgba(0,188,212,0.8)] text-[0.8rem] uppercase font-semibold px-3 py-1 w-fit'
                                 onClick={() => setIsDrawerOpen(false)}
                             >
                                 Sign in
