@@ -1,4 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import MasterLayout from './MasterLayout';
 import HomePage from './components/pageComponents/HomePage';
 import MyPlannerPage from './components/pageComponents/MyPlannerPage';
@@ -14,6 +17,10 @@ function App() {
                     <Route path='/my-plans' element={<MyPlannerPage />} />
                 </Route>
             </Routes>
+            <ToastContainer
+                position="top-center"
+                aria-label="Toastify"
+            />
         </Router>
     )
 }
