@@ -6,7 +6,7 @@ import updateLocale from "dayjs/plugin/updateLocale";
 import Button from '../baseComponents/Button';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { FormDate } from '../../types';
+import { AddPlannerDataType, PlannerResponseDataType } from '../../types';
 import { AppDispatch, getGenerateStudyPlan, RootState } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { generateAiPrompt } from '../../utilities/constants';
@@ -18,19 +18,6 @@ dayjs.extend(weekday);
 dayjs.extend(updateLocale);
 
 const { RangePicker: AntRangePicker } = DatePicker;
-
-type DataTypes = {
-    topic: string,
-    levelOfExpertise: string,
-    studyDuration: string,
-    studyDays: string[],
-    totalTimeCommitment: string,
-    significance: string,
-    applications: string[],
-    learningObjectives: string[],
-    dayOverview: { [key: string]: any }[],
-    learningResources: { [key: string]: any },
-}
 
 const dayNameToNumber: { [key: string]: number } = {
     Sunday: 0,
@@ -45,7 +32,7 @@ const dayNameToNumber: { [key: string]: number } = {
 const AddPlannerPage = () => {
     const { isLoading, generateStudyPlan } = useSelector((state: RootState) => state?.studyPlanner);
     const dispatch = useDispatch<AppDispatch>();
-    const initialValues: FormDate = {
+    const initialValues: AddPlannerDataType = {
         topic: "",
         level: "",
         dateRange: [],
@@ -53,7 +40,7 @@ const AddPlannerPage = () => {
     }
     const [formDate, setFormDate] = useState(initialValues);
     const { topic, level, dateRange, schedule } = formDate;
-    const [data, setData] = useState<DataTypes>({
+    const [data, setData] = useState<PlannerResponseDataType>({
         topic: '',
         levelOfExpertise: '',
         studyDuration: '',
@@ -64,10 +51,15 @@ const AddPlannerPage = () => {
         learningObjectives: [],
         dayOverview: [],
         learningResources: {},
+        assessment: {
+            methods: [],
+            frequency: ''
+        },
+        adjustments: [],
     })
     useEffect(() => {
         if (generateStudyPlan) {
-            const { userProfile, topicOverview, learningObjectives, studySchedule: { dayOverview }, learningResources } = generateStudyPlan?.personalizedStudyPlan;
+            const { userProfile, topicOverview, learningObjectives, studySchedule: { dayOverview }, learningResources, assessment: { methods, frequency }, adjustments: { guidance } } = generateStudyPlan?.personalizedStudyPlan;
 
             const [start, end] = userProfile?.studyDuration.split(" - ");
             const formattedStart = dayjs(start, "MMMM D, YYYY").format("MMM D, YYYY");
@@ -91,8 +83,12 @@ const AddPlannerPage = () => {
                 learningObjectives,
                 dayOverview,
                 learningResources,
+                assessment: {
+                    methods,
+                    frequency
+                },
+                adjustments: guidance
             }
-            console.log(dayOverview, "dayOverview")
             setData(newData)
         }
     }, [generateStudyPlan])
@@ -310,6 +306,40 @@ const AddPlannerPage = () => {
                     </div>
                     <div className="learning-resources mb-4">
                         <LearningResources learningResources={data?.learningResources} />
+                    </div>
+                    <div className="assessment mb-4">
+                        <div className="relative">
+                            <div aria-hidden="true" className="absolute inset-0 flex items-center">
+                                <div className="w-full border-t border-gray-300" />
+                            </div>
+                            <div className="relative flex justify-center">
+                                <span className="bg-white px-3 text-base font-semibold text-gray-900 uppercase">Assessment</span>
+                            </div>
+                        </div>
+                        <ul className='list-disc mt-2 ps-8'>
+                            {
+                                data?.assessment?.methods && data.assessment.methods.map((method, index) => (
+                                    <li key={index} className='text-lg'>{method}</li>
+                                ))
+                            }
+                        </ul>
+                    </div>
+                    <div className="assessment mb-4">
+                        <div className="relative">
+                            <div aria-hidden="true" className="absolute inset-0 flex items-center">
+                                <div className="w-full border-t border-gray-300" />
+                            </div>
+                            <div className="relative flex justify-center">
+                                <span className="bg-white px-3 text-base font-semibold text-gray-900 uppercase">Guidance</span>
+                            </div>
+                        </div>
+                        <ul className='list-disc mt-2 ps-8'>
+                            {
+                                data?.adjustments && data.adjustments.map((adjustment, index) => (
+                                    <li key={index} className='text-lg'>{adjustment}</li>
+                                ))
+                            }
+                        </ul>
                     </div>
                 </div>
             }

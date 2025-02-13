@@ -1,7 +1,7 @@
 import { Button as AntButton } from 'antd';
 
 type ButtonProps = {
-    type?: 'Default' | 'Submit' | 'Primary' | 'Secondary',
+    type?: "default" | "primary" | "dashed" | "link" | "text" | "Submit",
     children: JSX.Element | string,
     className?: string,
     loading?: boolean,
@@ -12,7 +12,7 @@ type ButtonProps = {
 }
 
 const Button = ({
-    type = 'Default',
+    type = 'default',
     children,
     className = '',
     loading,

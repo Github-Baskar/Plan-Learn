@@ -1,8 +1,7 @@
 import { toast } from "react-toastify";
 import { getError } from "../../lib";
 import { chatSession } from "../../utilities/aiModel";
-import { getGenerateStudyPlanDispatch, setGenerateStudyPlanLoading } from "../slices/studyPlannerSlice";
-import { AppDispatch } from "..";
+import { AppDispatch, getGenerateStudyPlanDispatch, setGenerateStudyPlanLoading } from "..";
 import { ResponseData } from "../../utilities/dataResponse";
 
 export const getGenerateStudyPlan = (ai_prompt: string) => {
