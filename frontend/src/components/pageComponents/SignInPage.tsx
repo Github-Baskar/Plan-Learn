@@ -1,16 +1,26 @@
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { TokenResponse, useGoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 import { Divider as AntDivider } from 'antd';
+
+import { SignInErrorMsgType } from "../../types";
+import { AppDispatch, authUser, RootState } from "../../store";
+import { formatLabel, validateForm } from "../../utilities/commonFunction";
+
 import Button from "../baseComponents/Button";
 import { GoogleIcon } from "../../icons/GoogleIcon";
 import { EyeOpenIcon } from "../../icons/EyeOpenIcon";
 import { EyeCloseIcon } from "../../icons/EyeCloseIcon";
-import { formatLabel, validateForm } from "../../utilities/commonFunction";
-import { SignInErrorMsgType } from "../../types";
-
 
 const SignInPage = () => {
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
+    const { userInfo } = useSelector((state: RootState) => state.auth);
+    const [user, setUser] = useState<TokenResponse | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [isOauthLoading, setOauthIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
@@ -44,21 +54,65 @@ const SignInPage = () => {
             value = value.trim();
             if (value) {
                 let error = validateForm(formData, name, value);
-                if (isFormValid || error)
+                if (!isFormValid || error)
                     isFormValid = false;
                 error ? errorMsg[name] = error : errorMsg[name] = ''
             } else {
-                if (isFormValid)
+                if (!isFormValid)
                     isFormValid = false;
                 errorMsg[name] = `${formatLabel(name)} field is required.`
             }
         });
         if (isFormValid) {
-            console.log(formData, "formdata")
+            signInUser(formData, setIsLoading);
         } else {
             setErrorMsg((prev) => ({ ...prev, ...errorMsg }));
             setIsLoading(false)
         }
+    }
+    const signIn = useGoogleLogin({
+        onSuccess: (codeResponse: TokenResponse) => setUser(codeResponse),
+        onError: (error: unknown) => console.log('Login Failed:', error)
+    });
+    useEffect(() => {
+        if (userInfo) {
+            navigate('/');
+        }
+    }, [navigate, userInfo]);
+    useEffect(() => {
+        if (user) {
+            axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+                headers: {
+                    Authorization: `Bearer ${user.access_token}`,
+                    Accept: 'application/json'
+                }
+            })
+                .then((res) => {
+                    signInUser(res.data, setOauthIsLoading);
+                })
+                .catch((err) => console.log(err));
+        }
+    }, [user]);
+    const signInUser = async (data: { [key: string]: string }, setIsLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
+        const { email, password, picture } = data
+        if (email && password) {
+            await dispatch(authUser({ email, password }, navigate))
+        } else if (email && picture) {
+            setIsLoading(true);
+            await dispatch(authUser({ email }, navigate, picture));
+        }
+        resetField();
+        setIsLoading(false);
+    }
+    const resetField = () => {
+        setFormData({
+            email: '',
+            password: '',
+        })
+        setErrorMsg({
+            email: '',
+            password: '',
+        })
     }
     return (
         <div className="auth-page-wrapper flex flex-1 flex-col justify-center bg-gray h-[100vh]">
@@ -105,7 +159,7 @@ const SignInPage = () => {
                     </div>
                     <Button
                         type='Submit'
-                        className='bg-[#03A9F4] text-[#fff] uppercase hover:!bg-[rgba(3,169,244,0.7)] hover:!text-[#fff] focus-visible:outline-0 border-0 rounded-md py-4 lg:py-5 text-sm/6 font-semibold w-full'
+                        className='bg-[#00bcd4] text-[#fff] uppercase hover:!text-[#00bcd4] border-[#00bcd4] focus-visible:outline-0 rounded-md py-4 lg:py-5 text-sm/6 font-semibold w-full'
                         loading={isLoading}
                         onClick={() => setIsLoading(true)}
                     >
@@ -114,17 +168,16 @@ const SignInPage = () => {
                 </form>
                 <AntDivider><small>or sign in with</small></AntDivider>
                 <Button
-                    className='border border-black rounded-md py-4 lg:py-5 text-sm/6 font-semibold w-full hover:bg-[rgba(0,58,228,.04)]'
-                    // loading={isOauthLoading}
+                    className='border !border-black rounded-md py-4 lg:py-5 text-sm/6 font-semibold w-full hover:!bg-[rgba(0,58,228,.04)]'
+                    loading={isOauthLoading}
                     icon={<GoogleIcon />}
-                // onClick={() => {
-                //     setOauthIsLoading(true);
-                //     signin();
-                // }}
+                    onClick={() => {
+                        signIn();
+                    }}
                 >
                     Continue with Google
                 </Button>
-                <p className='text-[0.8rem] sm:text-[0.9rem] lg:text-[1rem] text-center mt-4'>Don't have an account?<NavLink to='/sign-up' className={`text-[#03A9F4] ps-1 underline hover:text-[rgba(3,169,244,0.7)]`}>Sign up</NavLink></p>
+                <p className='text-[0.8rem] sm:text-[0.9rem] lg:text-[1rem] text-center mt-4'>Don't have an account?<NavLink to='/sign-up' className={`text-[#00bcd4] ps-1 underline hover:text-[rgba(3,169,244,0.7)]`}>Sign up</NavLink></p>
             </div>
         </div>
     )

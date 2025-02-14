@@ -1,7 +1,7 @@
 const MenuIcon = () => {
     return (
         <svg
-            fill="#03A9F4"
+            fill="#00bcd4"
             width="30"
             height="30"
             viewBox="0 0 24 24"

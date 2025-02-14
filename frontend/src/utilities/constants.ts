@@ -1,19 +1,19 @@
-import { FormDate } from "../types";
+import { AddPlannerDataType } from "../types";
 
 export const menuList = [
     {
         path: 'create',
         name: 'Create New Plan ✍️',
-        authRoute: true
+        authRoute: false
     },
     {
         path: 'my-plans',
         name: 'My Plans 📅',
-        authRoute: true
+        authRoute: false
     },
 ]
 
-export const generateAiPrompt = ({ topic, level, dateRange, schedule }: FormDate): string => {
+export const generateAiPrompt = ({ topic, level, dateRange, schedule }:AddPlannerDataType): string => {
     const startDate = dateRange[0];
     const endDate = dateRange[1];
     const preferredDays = schedule.join(', ');

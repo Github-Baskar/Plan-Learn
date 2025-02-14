@@ -3,7 +3,7 @@ import User from '../models/userRoutes.js';
 import generateToken from '../utils/generateToken.js';
 
 // @desc        Register a new user
-// route        POST /api/users
+// route        POST /api/user
 // @access      Public
 const registerUser = asyncHandler(async (req, res) => {
     const { name, email, password, authType } = req.body;
@@ -32,7 +32,7 @@ const registerUser = asyncHandler(async (req, res) => {
 })
 
 // @desc        Auth user/set token
-// route        POST /api/users/auth
+// route        POST /api/user/auth
 // @access      Public
 const authUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
@@ -60,7 +60,7 @@ const authUser = asyncHandler(async (req, res) => {
 });
 
 // @desc        Signout user
-// route        POST /api/users/signout
+// route        POST /api/user/signout
 // @access      Public
 const signoutUser = asyncHandler(async (req, res) => {
     res.cookie('jwt', '', {

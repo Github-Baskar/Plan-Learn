@@ -1,11 +1,11 @@
 export type SignInErrorMsgType = {
-    email: string,
-    password: string,
+    email: string;
+    password: string;
 }
 
 export type SignUpErrorMsgType = SignInErrorMsgType & {
-    name: string,
-    confirmPassword: string
+    name: string;
+    confirmPassword: string;
 }
 
 export type UserInfoSliceType = {
@@ -14,6 +14,7 @@ export type UserInfoSliceType = {
         id: string;
         name: string;
         email: string;
+        picture?: string;
     } | null;
 }
 
@@ -25,19 +26,19 @@ export type AddPlannerDataType = {
 }
 
 export type PlannerResponseDataType = {
-    topic: string,
-    levelOfExpertise: string,
-    studyDuration: string,
-    studyDays: string[],
-    totalTimeCommitment: string,
-    significance: string,
-    applications: string[],
-    learningObjectives: string[],
-    dayOverview: { [key: string]: any }[],
-    learningResources: { [key: string]: any },
+    topic: string;
+    levelOfExpertise: string;
+    studyDuration: string;
+    studyDays: string[];
+    totalTimeCommitment: string;
+    significance: string;
+    applications: string[];
+    learningObjectives: string[];
+    dayOverview: { [key: string]: any }[];
+    learningResources: { [key: string]: any };
     assessment: {
-        methods: string[],
-        frequency: string
+        methods: string[];
+        frequency: string;
     },
-    adjustments: string[]
+    adjustments: string[];
 }

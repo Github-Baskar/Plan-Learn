@@ -1,21 +1,23 @@
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Divider as AntDivider } from 'antd';
+import { useDispatch, useSelector } from "react-redux";
 import { useGoogleLogin, type TokenResponse } from '@react-oauth/google';
+import axios from "axios";
+import { Divider as AntDivider } from 'antd';
+
+import { AppDispatch, registerUser, RootState } from "../../store";
+import { SignUpErrorMsgType } from "../../types";
+import { formatLabel, validateForm } from "../../utilities/commonFunction";
+
 import Button from "../baseComponents/Button";
 import { GoogleIcon } from "../../icons/GoogleIcon";
 import { EyeOpenIcon } from "../../icons/EyeOpenIcon";
 import { EyeCloseIcon } from "../../icons/EyeCloseIcon";
-import { formatLabel, validateForm } from "../../utilities/commonFunction";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, registerUser, RootState } from "../../store";
-import axios from "axios";
-import { SignUpErrorMsgType } from "../../types";
 
 const SignUpPage = () => {
-    const { userInfo } = useSelector((state: RootState) => state.auth);
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
+    const { userInfo } = useSelector((state: RootState) => state.auth);
     const [user, setUser] = useState<TokenResponse | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isOauthLoading, setOauthIsLoading] = useState(false);
@@ -66,7 +68,7 @@ const SignUpPage = () => {
                 errorMsg[name] = `${formatLabel(name)} field is required.`
             }
         });
-        
+
         console.log(isFormValid, "submit")
         if (isFormValid) {
             signUpUser(formData, setIsLoading);
@@ -102,12 +104,14 @@ const SignUpPage = () => {
         const { name, email, password, confirmPassword } = data
         const [token] = rest
         if (name && email && token) {
+            setIsLoading(true);
             await dispatch(registerUser({ name, email, authType: user?.access_token ? 'oauth' : 'password' }, navigate))
         } else if (name && email && password === confirmPassword) {
             await dispatch(registerUser({ name, email, password, authType: 'password' }, navigate))
         }
         resetField();
         setIsLoading(false);
+
     }
     const resetField = () => {
         setFormData({
@@ -206,26 +210,25 @@ const SignUpPage = () => {
                     </div>
                     <Button
                         type='Submit'
-                        className='bg-[#03A9F4] text-[#fff] uppercase hover:!bg-[rgba(3,169,244,0.7)] hover:!text-[#fff] focus-visible:outline-0 border-0 rounded-md py-4 lg:py-5 text-sm/6 font-semibold w-full'
+                        className='bg-[#00bcd4] text-[#fff] uppercase hover:!text-[#00bcd4] border-[#00bcd4] focus-visible:outline-0 rounded-md py-4 lg:py-5 text-sm/6 font-semibold w-full'
                         loading={isLoading}
-                        onClick={() => {setIsLoading(true); console.log("click")}}
+                        onClick={() => { setIsLoading(true); console.log("click") }}
                     >
                         Sign up
                     </Button>
                 </form>
                 <AntDivider><small>or sign up with</small></AntDivider>
                 <Button
-                    className='border border-black rounded-md py-4 lg:py-5 text-sm/6 font-semibold w-full hover:bg-[rgba(0,58,228,.04)]'
+                    className='border !border-black rounded-md py-4 lg:py-5 text-sm/6 font-semibold w-full hover:!bg-[rgba(0,58,228,.04)]'
                     loading={isOauthLoading}
                     icon={<GoogleIcon />}
                     onClick={() => {
-                        setOauthIsLoading(true);
                         signup();
                     }}
                 >
                     Continue with Google
                 </Button>
-                <p className='text-[0.8rem] sm:text-[0.9rem] lg:text-[1rem] text-center mt-4'>Have an account?<NavLink to='/sign-in' className={`text-[#03A9F4] ps-1 underline hover:text-[rgba(3,169,244,0.7)]`}>Sign in</NavLink></p>
+                <p className='text-[0.8rem] sm:text-[0.9rem] lg:text-[1rem] text-center mt-4'>Have an account?<NavLink to='/sign-in' className={`text-[#00bcd4] ps-1 underline hover:text-[rgba(3,169,244,0.7)]`}>Sign in</NavLink></p>
             </div>
         </div>
     )

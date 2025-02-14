@@ -16,7 +16,8 @@ const authSlice = createSlice({
         setAuthLoading: (state, { payload }) => {
             state.isLoading = payload
         },
-        setCredentialsDispatch: (_state, { payload }) => {
+        setCredentialsDispatch: (state, { payload }) => {
+            state.userInfo = payload;
             localStorage.setItem('userInfo', JSON.stringify(payload));
         },
         logoutDispatch: (state) => {
