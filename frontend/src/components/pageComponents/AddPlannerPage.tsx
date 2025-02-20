@@ -1,4 +1,4 @@
-import { Select as AntSelect, DatePicker } from 'antd';
+import { Select as AntSelect, DatePicker, TimePicker } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import weekday from "dayjs/plugin/weekday";
@@ -7,17 +7,19 @@ import Button from '../baseComponents/Button';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { AddPlannerDataType, PlannerResponseDataType } from '../../types';
-import { AppDispatch, getGenerateStudyPlan, RootState } from '../../store';
+import { addStudyPlan, AppDispatch, getGenerateStudyPlan, RootState } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { generateAiPrompt } from '../../utilities/constants';
 import Activities from '../groupComponents/Activities';
 import LearningResources from '../groupComponents/LearningResources';
+import { useNavigate } from 'react-router-dom';
 
 dayjs.extend(customParseFormat);
 dayjs.extend(weekday);
 dayjs.extend(updateLocale);
 
 const { RangePicker: AntRangePicker } = DatePicker;
+const { RangePicker: AntTimeRangePicker } = TimePicker;
 
 const dayNameToNumber: { [key: string]: number } = {
     Sunday: 0,
@@ -30,16 +32,19 @@ const dayNameToNumber: { [key: string]: number } = {
 };
 
 const AddPlannerPage = () => {
-    const { isLoading, generateStudyPlan } = useSelector((state: RootState) => state?.studyPlanner);
+    const { isLoading, isAddPlanLoading, generateStudyPlan } = useSelector((state: RootState) => state?.studyPlanner);
+    const { userInfo } = useSelector((state: RootState) => state.auth);
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
     const initialValues: AddPlannerDataType = {
         topic: "",
         level: "",
         dateRange: [],
-        schedule: []
+        timeRange: [],
+        schedule: [],
     }
     const [formDate, setFormDate] = useState(initialValues);
-    const { topic, level, dateRange, schedule } = formDate;
+    const { topic, level, dateRange, timeRange, schedule } = formDate;
     const [data, setData] = useState<PlannerResponseDataType>({
         topic: '',
         levelOfExpertise: '',
@@ -57,6 +62,8 @@ const AddPlannerPage = () => {
         },
         adjustments: [],
     })
+    const [activitiesData, setActivitiesData] = useState<{ [key: string]: any; }[]>([]);
+
     useEffect(() => {
         if (generateStudyPlan) {
             const { userProfile, topicOverview, learningObjectives, studySchedule: { dayOverview }, learningResources, assessment: { methods, frequency }, adjustments: { guidance } } = generateStudyPlan?.personalizedStudyPlan;
@@ -92,7 +99,19 @@ const AddPlannerPage = () => {
             setData(newData)
         }
     }, [generateStudyPlan])
-    console.log(isLoading, generateStudyPlan, "generateStudyPlan");
+    useEffect(() => {
+        setActivitiesData([...data.dayOverview])
+    }, [data.dayOverview])
+
+    const addPlan = () => {
+        const { significance, applications, learningObjectives, adjustments, ...filteredData } = data;
+        const finalData: Omit<PlannerResponseDataType, "significance" | "applications" | "learningObjectives" | "adjustments"> = {
+            ...filteredData,
+            dayOverview: activitiesData,
+            userId: userInfo?.id
+        }
+        dispatch(addStudyPlan(finalData, navigate))
+    }
     return (
         <div className="flex flex-col justify-center items-center">
             <div className="banner-section relative w-full h-[50vh]">
@@ -124,7 +143,7 @@ const AddPlannerPage = () => {
                         dispatch(getGenerateStudyPlan(prompt));
                     }
                 }}>
-                    <div className="flex justify-between items-center gap-4">
+                    <div className="grid grid-cols-3 gap-4">
                         <input
                             className="border border-[#6b7280] outline-none rounded-md text-xs lg:text-sm sm:leading-6 h-[45px] md:h-[50px] z-10 px-[11px] w-full"
                             type="text"
@@ -169,6 +188,19 @@ const AddPlannerPage = () => {
                             value={
                                 Array.isArray(dateRange) && dateRange.length === 2 && dateRange[0] && dateRange[1] ?
                                     [dayjs(dateRange[0], 'DD-MM-YYYY'), dayjs(dateRange[1], 'DD-MM-YYYY')] : [null, null]
+                            }
+                        />
+                        <AntTimeRangePicker
+                            className={`time-field w-full rounded-md border border-[#333] hover:border-[#333] focus:shadow-none focus-within:shadow-none focus-within:border-[#333] bg-transparent text-gray-900 shadow-sm placeholder:text-[#5b6780] text-xs lg:text-sm sm:leading-6 h-[45px] md:h-[50px] flex items-center`}
+                            format={'hh:mm A'}
+                            needConfirm={false}
+                            minuteStep={5}
+                            onChange={(_value: [Dayjs | null, Dayjs | null] | null, timeString: [string, string]) => {
+                                setFormDate({ ...formDate, timeRange: timeString })
+                            }}
+                            value={
+                                Array.isArray(timeRange) && timeRange.length === 2 && timeRange[0] && timeRange[1] ?
+                                    [dayjs(timeRange[0], 'hh:mm A'), dayjs(timeRange[1], 'hh:mm A')] : [null, null]
                             }
                         />
                         <AntSelect
@@ -240,6 +272,8 @@ const AddPlannerPage = () => {
                         <h1 className='text-4xl font-bold'>{data?.topic}</h1>
                         <Button
                             className='btn border-[#00bcd4] text-white bg-[#00bcd4] text-base md:text-base font-normal p-4 w-fit h-[40px] rounded-full'
+                            onClick={addPlan}
+                            loading={isAddPlanLoading}
                         >
                             Add to Plan
                         </Button>
@@ -302,7 +336,7 @@ const AddPlannerPage = () => {
                                 <span className="bg-white px-3 text-base font-semibold text-gray-900 uppercase">Study Schedule</span>
                             </div>
                         </div>
-                        <Activities activityOverview={data.dayOverview} />
+                        <Activities activityOverview={activitiesData} setActivitiesData={setActivitiesData} />
                     </div>
                     <div className="learning-resources mb-4">
                         <LearningResources learningResources={data?.learningResources} />

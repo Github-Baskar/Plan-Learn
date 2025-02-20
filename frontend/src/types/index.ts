@@ -22,10 +22,12 @@ export type AddPlannerDataType = {
     topic: string;
     level: string;
     dateRange: string[];
+    timeRange: string[];
     schedule: string[];
 }
 
 export type PlannerResponseDataType = {
+    userId?: string;
     topic: string;
     levelOfExpertise: string;
     studyDuration: string;

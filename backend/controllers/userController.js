@@ -1,5 +1,5 @@
 import asyncHandler from 'express-async-handler';
-import User from '../models/userRoutes.js';
+import User from '../models/userModel.js';
 import generateToken from '../utils/generateToken.js';
 
 // @desc        Register a new user
@@ -21,7 +21,7 @@ const registerUser = asyncHandler(async (req, res) => {
     if (user) {
         generateToken(res, user._id)
         res.status(201).json({
-            _id: user._id,
+            id: user._id,
             name: user.name,
             email: user.email
         });
@@ -41,14 +41,14 @@ const authUser = asyncHandler(async (req, res) => {
         if (user.authType === 'password' && await user.matchPassword(password)) {
             generateToken(res, user._id)
             res.status(200).json({
-                _id: user._id,
+                id: user._id,
                 name: user.name,
                 email: user.email
             });
         } else if (user.authType === 'oauth') {
             generateToken(res, user._id)
             res.status(200).json({
-                _id: user._id,
+                id: user._id,
                 name: user.name,
                 email: user.email
             });
