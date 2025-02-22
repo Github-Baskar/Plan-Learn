@@ -16,5 +16,9 @@ export default {
             '2xl': '1536px',
         }
     },
-    plugins: [],
+    plugins: [
+        function ({ addVariant }) {
+            addVariant('not-last', '&:not(:last-child)'); // Adds a `not-last:` utility
+        },
+    ],
 }

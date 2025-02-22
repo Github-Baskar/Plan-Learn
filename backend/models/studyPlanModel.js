@@ -7,11 +7,6 @@ const studyPlanSchema = new mongoose.Schema(
             ref: "User",
             required: true
         },
-        studyPlanStatus: {
-            type: String,
-            default: "pending",
-            enum: ['pending', 'inProgress', 'overDue', 'completed'],
-        },
         levelOfExpertise: {
             type: String,
             required: true
@@ -31,6 +26,34 @@ const studyPlanSchema = new mongoose.Schema(
         totalTimeCommitment: {
             type: String,
             required: true
+        },
+        learningResources: {
+            articlesAndJournals: [{
+                description: String,
+                link: String,
+                thumbnail: String,
+                title: String
+            }],
+            books: [{
+                title: String,
+                author: String,
+                description: String,
+                image: String,
+            }],
+            onlineCourses: [{
+                courseTitle: String,
+                description: String,
+                link: String,
+                platform: String,
+                thumbnail: String,
+            }],
+            videosAndDocumentaries: [{
+                title: String,
+                description: String,
+                link: String,
+                platform: String,
+                thumbnail: String,
+            }]
         },
         assessment: {
             methods: { type: [String], required: true },

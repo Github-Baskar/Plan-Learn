@@ -6,6 +6,7 @@ import cors from 'cors';
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import connectDB from "./config/db.js";
 import userRoutes from './routes/userRoutes.js';
+import studyPlanRoutes from './routes/studyPlanRoutes.js';
 
 const port = process.env.PORT || 5000;
 
@@ -24,6 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use('/api/user', userRoutes);
+app.use('/api/study-plan', studyPlanRoutes)
 
 app.get("/", (req, res) => res.send("Server is running..."));
 

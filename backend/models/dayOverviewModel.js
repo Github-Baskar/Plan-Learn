@@ -7,16 +7,7 @@ const DayOverviewSchema = new mongoose.Schema(
             ref: 'StudyPlan',
             required: true
         },
-        dayOverviewStatus: {
-            type: String,
-            default: "pending",
-            enum: ['pending', 'inProgress', 'overDue', 'completed'],
-        },
         date: {
-            type: String,
-            required: true
-        },
-        duration: {
             type: String,
             required: true
         },

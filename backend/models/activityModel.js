@@ -2,6 +2,11 @@ import mongoose from 'mongoose';
 
 const ActivitySchema = new mongoose.Schema(
     {
+        studyPlanId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'StudyPlan',
+            required: true
+        },
         dayOverviewId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'DayOverview',
@@ -11,9 +16,9 @@ const ActivitySchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
-        isOverDue: {
+        isDisable: {
             type: Boolean,
-            default: false,
+            default: true,
         },
         activity: {
             type: String,
@@ -21,6 +26,10 @@ const ActivitySchema = new mongoose.Schema(
         },
         time: {
             type: String,
+            required: true
+        },
+        date: {
+            type: Date,
             required: true
         },
         type: {

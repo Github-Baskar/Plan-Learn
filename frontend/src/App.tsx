@@ -8,6 +8,7 @@ import MyPlannerPage from './components/pageComponents/MyPlannerPage';
 import AddPlannerPage from './components/pageComponents/AddPlannerPage';
 import SignInPage from './components/pageComponents/SignInPage';
 import SignUpPage from './components/pageComponents/SignUpPage';
+import PlannerInfoPage from './components/pageComponents/PlannerInfoPage';
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                     <Route index element={<HomePage />} />
                     <Route path='/create' element={<AddPlannerPage />} />
                     <Route path='/my-plans' element={<MyPlannerPage />} />
+                    <Route path='/my-plans/:id' element={<PlannerInfoPage />} />
                 </Route>
             </Routes>
             <ToastContainer
