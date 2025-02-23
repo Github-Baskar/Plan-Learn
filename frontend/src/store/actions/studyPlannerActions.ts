@@ -3,7 +3,6 @@ import { NavigateFunction } from 'react-router-dom';
 import { axios, getError } from "../../lib";
 import { chatSession } from "../../utilities/aiModel";
 import { AppDispatch, getGenerateStudyPlanDispatch, getStudyPlanInfoDispatch, getStudyPlanListDispatch, setAddPlanLoading, setGenerateStudyPlanLoading, setStudyPlanInfoLoading, setStudyPlanListLoading } from "..";
-// import { ResponseData } from "../../utilities/dataResponse";
 import { getAddStudyPlanConfig, getStudyPlanInfoConfig, getStudyPlanListConfig } from "../../lib/requests/studyPlanner";
 import { PlannerResponseDataType } from "../../types";
 
@@ -31,6 +30,7 @@ export const addStudyPlan = (data: Omit<PlannerResponseDataType, "significance" 
             const res = await axios.post(url, data);
             toast.success(res.data?.message || "Study plan added successfully.");
             navigate('/my-plans')
+            res.status === 201 && dispatch(getGenerateStudyPlanDispatch({}));
         } catch (error) {
             toast.error(getError(error = {}));
         } finally {
@@ -45,7 +45,9 @@ export const getStudyPlanList = () => {
         try {
             const { url } = getStudyPlanListConfig();
             const res = await axios.get(url);
-            res?.data?.response && dispatch(getStudyPlanListDispatch(res.data.response));
+            if (res.status === 200 && res?.data?.response) {
+                dispatch(getStudyPlanListDispatch(res.data.response));
+            }
         } catch (error) {
             toast.error(getError(error = {}));
         } finally {

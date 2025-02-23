@@ -20,7 +20,7 @@ const Header = () => {
     return (
         <nav className="flex justify-center items-center sticky top-0 z-[100] h-[80px] shadow-md bg-white">
             <div className="header-content flex justify-between items-center w-[100%] md:w-[90%] lg:w-[80%] p-4 md:p-0">
-                <h1 className='text-base lg:text-lg uppercase tracking-[3px] font-[800] text-[#00bcd4]'>Plan & Learn</h1>
+                <h1 className='text-base lg:text-lg uppercase tracking-[3px] font-[800] text-[#00bcd4] cursor-pointer' onClick={()=>navigate('/')}>Plan & Learn</h1>
                 <div className="hidden md:block">
                     <NavMenuList
                         isLoading={isLoading}
@@ -39,7 +39,7 @@ const Header = () => {
                 </button>
                 <AntDrawer
                     title={
-                        <h1 className='text-base lg:text-lg text-[#00bcd4] uppercase tracking-[3px] font-[800] my-3'>Plan & Learn</h1>
+                        <h1 className='text-base lg:text-lg text-[#00bcd4] uppercase tracking-[3px] font-[800] my-3 cursor-pointer' onClick={()=>navigate('/')}>Plan & Learn</h1>
                     }
                     placement={'right'}
                     closable={false}

@@ -1,5 +1,5 @@
 type DividerProps = {
-    children: string
+    children: React.ReactNode | string
 }
 const Divider = ({
     children,

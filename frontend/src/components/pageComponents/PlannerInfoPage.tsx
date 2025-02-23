@@ -17,6 +17,7 @@ import { InfoDataType } from "../../types";
 import Badge from "../baseComponents/Badge";
 import Divider from "../baseComponents/Divider";
 import CheckBoxIcon from "../../icons/CheckBoxIcon";
+import PlannerInfoLoader from "../../skeletonLoaders/PlannerInfoLoader";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(weekday);
@@ -105,14 +106,7 @@ const PlannerInfoPage = () => {
         <div className="flex justify-center items-center">
             {
                 isStudyPlanInfoLoading ?
-                    <div className="fixed top-0 left-0 z-50 w-full h-full bg-black/50 flex justify-center items-center">
-                        <div className="bg-white p-4 rounded-md">
-                            <div className="flex flex-col justify-center items-center animate-pulse">
-                                <img src="/ai-assistant.png" alt="loading" className="w-[225px]" />
-                                <p className="text-lg font-semibold">Get Study Plan List...</p>
-                            </div>
-                        </div>
-                    </div>
+                    <PlannerInfoLoader />
                     :
                     <div className="card bg-white text-black border border-[#00bcd4] shadow-md rounded-lg p-4 md:p-8 w-[95%] md:w-[80%] my-8">
                         <div className="flex justify-between items-center mb-8">
@@ -166,7 +160,7 @@ const PlannerInfoPage = () => {
                             </div>
                         </div>
                         <div className="study-schedule mb-4 sm:mb-8">
-                            <Divider>Study Schedule</Divider>
+                            <Divider>Learn Schedule</Divider>
                             {
                                 infoData?.dayOverview && infoData.dayOverview.map((day, key) => (
                                     <div key={key} className="mb-4">

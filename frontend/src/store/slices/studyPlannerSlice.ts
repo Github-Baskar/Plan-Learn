@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ResponseData } from '../../utilities/dataResponse';
 
 type InitialStateType = {
     isLoading: boolean,
@@ -29,7 +28,7 @@ const initialState: InitialStateType = {
     isAddPlanLoading: false,
     isStudyPlanListLoading: false,
     isStudyPlanInfoLoading: false,
-    generateStudyPlan: {...ResponseData},
+    generateStudyPlan: {},
     studyPlanList: [],
     studyPlanInfo: {
         _id: '',

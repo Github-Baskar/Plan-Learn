@@ -220,7 +220,7 @@ const AddPlannerPage = () => {
                             className='btn !border-[#00bcd4] !text-[rgb(0,188,212)] bg-[rgba(0,188,212,.1)] hover:!bg-[rgba(0,188,212,.2)] text-base md:text-lg px-4 py-3 w-fit h-[40px]'
                             loading={isLoading}
                         >
-                            Generate Study Plan
+                            Generate Learn Plan
                         </Button>
                     </div>
                 </form>
@@ -282,7 +282,7 @@ const AddPlannerPage = () => {
                             </ul>
                         </div>
                         <div className="study-schedule mb-4 sm:mb-8">
-                            <Divider>Study Schedule</Divider>
+                            <Divider>Learn Schedule</Divider>
                             <Activities activityOverview={activitiesData} />
                         </div>
                         <div className="learning-resources mb-4 sm:mb-8">

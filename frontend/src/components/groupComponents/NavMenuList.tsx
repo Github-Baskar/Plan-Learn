@@ -51,6 +51,7 @@ const NavMenuList = ({
             }
             <li className='hidden md:block ms-4'>
                 <AntPopover
+                    trigger="click"
                     content={
                         <div className='flex flex-col gap-2 min-w-[225px]'>
                             <p className='font-semibold text-[#4b5563] text-[0.8rem] md:text-[0.9rem] lg:text-[1rem] tracking-[1px] ms-[0.4px]'>Name: <span>{userInfo?.name || 'Guest User'}</span></p>
