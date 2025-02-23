@@ -47,7 +47,7 @@ export const signoutUser = (navigate: NavigateFunction) => {
             await axios.post(url);
             dispatch(logoutDispatch());
             toast.success('Signed out successfully. See you next time!');
-            navigate('/sign-in');
+            navigate('/');
         } catch (error) {
             toast.error(getError(error = {}));
         } finally {

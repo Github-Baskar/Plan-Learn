@@ -6,7 +6,7 @@ import { addStudyPlan, deleteStudyPlan, getStudyPlanInfo, getStudyPlanList, upda
 router.use(protect);
 
 router.post('/add', addStudyPlan);
-router.get('/', getStudyPlanList);
+router.get('/list/:id', getStudyPlanList);
 router.route('/:id')
     .get(getStudyPlanInfo)
     .put(updateStudyPlanActivity)

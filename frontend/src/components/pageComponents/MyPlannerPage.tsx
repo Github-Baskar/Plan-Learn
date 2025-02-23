@@ -19,12 +19,13 @@ dayjs.extend(updateLocale);
 
 const MyPlannerPage = () => {
     const { isStudyPlanListLoading, studyPlanList } = useSelector((state: RootState) => state?.studyPlanner);
+    const { userInfo } = useSelector((state: RootState) => state.auth);
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const [dataList, setDataList] = useState<DataListType>([]);
 
     useEffect(() => {
-        dispatch(getStudyPlanList())
+        userInfo?.id && dispatch(getStudyPlanList(userInfo.id))
     }, [])
     useEffect(() => {
         setDataList(studyPlanList);
@@ -73,7 +74,7 @@ const MyPlannerPage = () => {
                                             )
                                         })
                                     }
-                                </div> : <div className="text-gray-500 text-center py-4">No study plan has been added yet.</div>
+                                </div> : userInfo?.id ? <div className="text-gray-500 text-center py-4">No study plans have been added yet</div> : <div className="text-gray-500 text-center py-4">You must be logged in to add a study plan. Please log in to continue.</div>
                         }
                     </>
             }

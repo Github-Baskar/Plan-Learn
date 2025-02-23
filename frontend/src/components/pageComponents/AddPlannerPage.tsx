@@ -114,7 +114,7 @@ const AddPlannerPage = () => {
     }, [data])
 
     const addPlan = () => {
-        if (data) {
+        if (userInfo?.id && data) {
             const { significance, applications, learningObjectives, adjustments, ...filteredData } = data;
             const finalData: Omit<PlannerResponseDataType, "significance" | "applications" | "learningObjectives" | "adjustments"> = {
                 ...filteredData,
@@ -122,6 +122,9 @@ const AddPlannerPage = () => {
                 userId: userInfo?.id
             }
             dispatch(addStudyPlan(finalData, navigate))
+        } else {
+            toast.info('Please log in to add your study plan and start your learning journey!')
+            navigate('/sign-in');
         }
     }
     const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {

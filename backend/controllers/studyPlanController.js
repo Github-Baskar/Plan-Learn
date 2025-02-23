@@ -87,7 +87,8 @@ const addStudyPlan = asyncHandler(async (req, res) => {
 // route        GET /api/study-plan
 // @access      Private
 const getStudyPlanList = asyncHandler(async (req, res) => {
-    const studyPlanList = await StudyPlan.find({}, {
+    const { id } = req.params
+    const studyPlanList = await StudyPlan.find({ userId: id }, {
         _id: 1,
         topic: 1,
         studyDuration: 1,

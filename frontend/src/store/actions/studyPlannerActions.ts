@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 import { NavigateFunction } from 'react-router-dom';
 import { axios, getError } from "../../lib";
 import { chatSession } from "../../utilities/aiModel";
-import { AppDispatch, getGenerateStudyPlanDispatch, getStudyPlanInfoDispatch, getStudyPlanListDispatch, setAddPlanLoading, setGenerateStudyPlanLoading, setStudyPlanInfoLoading, setStudyPlanListLoading } from "..";
+import { AppDispatch, getGenerateStudyPlanDispatch, getStudyPlanInfoDispatch, getStudyPlanListDispatch, RootState, setAddPlanLoading, setGenerateStudyPlanLoading, setStudyPlanInfoLoading, setStudyPlanListLoading } from "..";
 import { getAddStudyPlanConfig, getStudyPlanInfoConfig, getStudyPlanListConfig } from "../../lib/requests/studyPlanner";
 import { PlannerResponseDataType } from "../../types";
 
@@ -39,11 +39,11 @@ export const addStudyPlan = (data: Omit<PlannerResponseDataType, "significance" 
     };
 };
 
-export const getStudyPlanList = () => {
+export const getStudyPlanList = (id:string) => {
     return async (dispatch: AppDispatch) => {
         dispatch(setStudyPlanListLoading(true));
         try {
-            const { url } = getStudyPlanListConfig();
+            const { url } = getStudyPlanListConfig(id);
             const res = await axios.get(url);
             if (res.status === 200 && res?.data?.response) {
                 dispatch(getStudyPlanListDispatch(res.data.response));
@@ -86,9 +86,11 @@ export const updateActivity = (params: { id: string }, data: { isComplete: boole
 }
 
 export const deleteStudyPlan = (id: string, navigate?: NavigateFunction) => {
-    return async (dispatch: AppDispatch) => {
+    return async (dispatch: AppDispatch, getState: () => RootState) => {
         navigate && dispatch(setStudyPlanInfoLoading(true));
         try {
+            const userId = getState()?.auth?.userInfo?.id || '';
+            if (!userId) throw new Error("User ID not found");
             const { url } = getStudyPlanInfoConfig(id);
             const res = await axios.delete(url);
             if (navigate) {
@@ -96,7 +98,7 @@ export const deleteStudyPlan = (id: string, navigate?: NavigateFunction) => {
             } else {
                 dispatch(setStudyPlanListLoading(true));
                 dispatch(getStudyPlanListDispatch([]));
-                dispatch(getStudyPlanList());
+                dispatch(getStudyPlanList(userId));
             }
             toast.success(res.data?.message || "Study plan deleted successfully.");
         } catch (error) {
