@@ -1,44 +1,33 @@
 import { useEffect, useState } from "react"
-import { DeleteIcon } from "../../icons/DeleteIcon"
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, deleteStudyPlan, getStudyPlanInfo, RootState, updateActivity } from "../../store";
 import dayjs from 'dayjs';
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import weekday from "dayjs/plugin/weekday";
 import updateLocale from "dayjs/plugin/updateLocale";
+
+import { AppDispatch, deleteStudyPlan, getStudyPlanInfo, RootState, updateActivity } from "../../store";
 import { dayNameToNumber } from "../../utilities/constants";
+
 import LearningResources from "../groupComponents/LearningResources";
+import { DeleteIcon } from "../../icons/DeleteIcon"
 import { BackIcon } from "../../icons/BackIcon";
-import { useNavigate, useParams } from "react-router-dom";
+import { classNames } from "../../utilities/commonFunction";
+import { InfoDataType } from "../../types";
+import Badge from "../baseComponents/Badge";
+import Divider from "../baseComponents/Divider";
+import CheckBoxIcon from "../../icons/CheckBoxIcon";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(weekday);
 dayjs.extend(updateLocale);
-
-type InfoDataType = {
-    _id: string;
-    topic: string;
-    levelOfExpertise: string;
-    studyDuration: string;
-    studyDays: string[];
-    totalTimeCommitment: string;
-    dayOverview: { [key: string]: any }[];
-    learningResources: { [key: string]: any };
-    assessment: {
-        methods: string[];
-    };
-    studyPlanStatus: string;
-}
-
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ')
-}
 
 const PlannerInfoPage = () => {
     const { isStudyPlanInfoLoading, studyPlanInfo } = useSelector((state: RootState) => state?.studyPlanner);
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const { id } = useParams();
+
     const [infoData, setInfoData] = useState<InfoDataType>({
         _id: '',
         topic: '',
@@ -56,10 +45,9 @@ const PlannerInfoPage = () => {
     const [activities, setActivities] = useState<Record<string, { isComplete: boolean; isDisable: boolean }>>({});
     const [status, setStatus] = useState('')
 
-    useEffect(()=>{
+    useEffect(() => {
         id && dispatch(getStudyPlanInfo(id))
-    },[id])
-
+    }, [id])
     useEffect(() => {
         if (studyPlanInfo) {
             const { _id, topic, levelOfExpertise, studyDuration, studyDays, totalTimeCommitment, dayOverview, learningResources, assessment: { methods }, studyPlanStatus } = studyPlanInfo;
@@ -92,7 +80,6 @@ const PlannerInfoPage = () => {
             setInfoData(newData)
         }
     }, [studyPlanInfo])
-
     useEffect(() => {
         if (infoData && infoData?.dayOverview) {
             const newActivities: Record<string, { isComplete: boolean; isDisable: boolean }> = {};
@@ -114,7 +101,6 @@ const PlannerInfoPage = () => {
             setStatus(infoData.studyPlanStatus);
         }
     }, [infoData]);
-
     return (
         <div className="flex justify-center items-center">
             {
@@ -128,78 +114,64 @@ const PlannerInfoPage = () => {
                         </div>
                     </div>
                     :
-                    <div className="card bg-white text-black border border-[#00bcd4] shadow-md rounded-lg p-8 w-[80%] my-8">
-                        <div className="relative flex justify-between items-center mb-8">
-                            <div className="flex items-center">
-                                <BackIcon className="w-[30px] h-[30px]" onClick={() => {
-                                    // dispatch(getStudyPlanList());
-                                    navigate('/my-plans')
-                                }} />
-                                <h1 className='text-4xl font-bold mx-4'>{infoData?.topic}</h1>
-                                <span
-                                    className={`inline-block mt-2 px-3 py-1 text-sm font-semibold rounded-full ${status === "Complete"
-                                        ? "bg-green-100 text-green-600"
-                                        : status === "On going"
-                                            ? "bg-blue-100 text-blue-600"
-                                            : status === "Overdue"
-                                                ? "bg-red-100 text-red-600"
-                                                : "bg-yellow-100 text-yellow-600"
-                                        }`}
-                                >
-                                    {status}
-                                </span>
+                    <div className="card bg-white text-black border border-[#00bcd4] shadow-md rounded-lg p-4 md:p-8 w-[95%] md:w-[80%] my-8">
+                        <div className="flex justify-between items-center mb-8">
+                            <div className="flex flex-wrap items-center">
+                                <div className="hover:bg-[rgba(0,188,212,.1)] p-2 rounded-full me-2 md:me-4">
+                                    <BackIcon
+                                        className="w-[22px] h-[22px] md:w-[25px] md:h-[25px]"
+                                        onClick={() => {
+                                            navigate('/my-plans')
+                                        }}
+                                    />
+                                </div>
+                                <div className="md:flex items-center">
+                                    <h1 className='text-xl sm:text-2xl md:text-3xl font-bold md:font-semibold'>{infoData?.topic}</h1>
+                                    <Badge className="mt-2 md:mt-0 md:ms-4">{status}</Badge>
+                                </div>
                             </div>
-                            <div className="absolute end-0">
+                            <div className="hover:bg-red-100 p-2 rounded-full">
                                 <DeleteIcon
-                                    className="w-[30px] h-[30px]"
+                                    className="w-[22px] h-[22px] md:w-[25px] md:h-[25px]"
                                     onClick={() => {
                                         dispatch(deleteStudyPlan(infoData._id, navigate));
-                                        // setDataList(dataList.filter(item => item._id !== infoData._id));
-                                        // setIsStudyPlanOpen(false);
                                     }}
                                 />
                             </div>
                         </div>
-                        <div className="card flex bg-white text-black border shadow-md rounded-lg py-8 my-8">
-                            <div className="border-r border-gray-300 flex justify-center items-center px-2 grow">
+                        <div className="short-details card flex flex-col sm:flex-row text-center bg-white text-black border shadow-md rounded-lg py-4 my-4 sm:py-8 sm:my-8">
+                            <div className="border-b sm:border-b-0 sm:border-r border-gray-300 flex justify-center items-center py-2 sm:px-2 sm:py-0 grow">
                                 <div className="self-center mx-auto">
-                                    <h2 className='text-base font-semibold'>{infoData?.studyDuration}</h2>
-                                    <p className='text-sm text-[#5b6780] font-medium'>Study Plan Duration</p>
+                                    <h2 className='text-base sm:text-xs md:text-sm lg:text-base font-semibold'>{infoData?.studyDuration}</h2>
+                                    <p className='text-sm sm:text-xs lg:text-sm text-[#5b6780] font-medium'>Study Plan Duration</p>
                                 </div>
                             </div>
-                            <div className="border-r border-gray-300 flex justify-center items-center px-2 grow">
+                            <div className="border-b sm:border-b-0 sm:border-r border-gray-300 flex justify-center items-center py-2 sm:px-2 sm:py-0 grow">
                                 <div className="self-center mx-auto">
-                                    <h2 className='text-base font-semibold'>{infoData?.studyDays.length === 7 ? 'All days' : infoData.studyDays.join(', ')}</h2>
-                                    <p className='text-sm text-[#5b6780] font-medium'>Preferred Days</p>
+                                    <h2 className='text-base sm:text-xs md:text-sm lg:text-base font-semibold'>{infoData?.studyDays.length === 7 ? 'All days' : infoData.studyDays.join(', ')}</h2>
+                                    <p className='text-sm sm:text-xs lg:text-sm text-[#5b6780] font-medium'>Preferred Days</p>
                                 </div>
                             </div>
-                            <div className="border-r border-gray-300 flex justify-center items-center px-2 grow">
+                            <div className="border-b sm:border-b-0 sm:border-r border-gray-300 flex justify-center items-center py-2 sm:px-2 sm:py-0 grow">
                                 <div className="self-center mx-auto">
-                                    <h2 className='text-base font-semibold'>{infoData?.levelOfExpertise} Level</h2>
-                                    <p className='text-sm text-[#5b6780] font-medium'>Level of Expertise</p>
+                                    <h2 className='text-base sm:text-xs md:text-sm lg:text-base font-semibold'>{infoData?.levelOfExpertise} Level</h2>
+                                    <p className='text-sm sm:text-xs lg:text-sm text-[#5b6780] font-medium'>Level of Expertise</p>
                                 </div>
                             </div>
-                            <div className="flex justify-center items-center px-2 grow">
+                            <div className="flex justify-center items-center py-2 sm:px-2 sm:py-0 grow">
                                 <div className="self-center mx-auto">
-                                    <h2 className='text-base font-semibold'>{infoData?.totalTimeCommitment}</h2>
-                                    <p className='text-sm text-[#5b6780] font-medium'>Session Duration</p>
+                                    <h2 className='text-base sm:text-xs md:text-sm lg:text-base font-semibold'>{infoData?.totalTimeCommitment}</h2>
+                                    <p className='text-sm sm:text-xs lg:text-sm text-[#5b6780] font-medium'>Session Duration</p>
                                 </div>
                             </div>
                         </div>
-                        <div className="study-schedule mb-8">
-                            <div className="relative mb-2">
-                                <div aria-hidden="true" className="absolute inset-0 flex items-center">
-                                    <div className="w-full border-t border-gray-300" />
-                                </div>
-                                <div className="relative flex justify-center">
-                                    <span className="bg-white px-3 text-base font-semibold text-gray-900 uppercase">Study Schedule</span>
-                                </div>
-                            </div>
+                        <div className="study-schedule mb-4 sm:mb-8">
+                            <Divider>Study Schedule</Divider>
                             {
                                 infoData?.dayOverview && infoData.dayOverview.map((day, key) => (
                                     <div key={key} className="mb-4">
-                                        <h3 className='text-lg font-semibold'>{day?.date}</h3>
-                                        <ul role="list" className="space-y-6 mt-2 ">
+                                        <h3 className='text-sm sm:text-base font-semibold'>{day?.date}</h3>
+                                        <ul role="list" className="space-y-3 sm:space-y-4 mt-2">
                                             {
                                                 Object.entries(activities).length > 0 &&
                                                 Object.entries(activities).map(([id, _activityData], index) => {
@@ -213,13 +185,13 @@ const PlannerInfoPage = () => {
                                                             <div
                                                                 className={classNames(
                                                                     !endActivity ? 'h-6' : '-bottom-6',
-                                                                    'absolute top-0 left-0 flex w-7 justify-center',
+                                                                    'absolute top-0 left-0 flex w-6 justify-center',
                                                                 )}
                                                             >
                                                                 <div className={`w-px ${activities[_id].isComplete ? 'bg-[#00bcd4]' : 'bg-gray-200'} `} />
                                                             </div>
                                                             <>
-                                                                <div className="relative flex size-7 flex-none items-center justify-center bg-white">
+                                                                <div className="relative flex size-6 flex-none items-center justify-center bg-white">
                                                                     <div className="flex h-6 shrink-0 items-center">
                                                                         <div className="group grid size-4 grid-cols-1">
                                                                             <input
@@ -265,39 +237,22 @@ const PlannerInfoPage = () => {
                                                                                     dispatch(updateActivity(params, body, setStatus));
                                                                                 }}
                                                                             />
-                                                                            <svg
-                                                                                fill="none"
-                                                                                viewBox="0 0 14 14"
-                                                                                className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-[#00bcd4] cursor-pointer group-has-[:disabled]:cursor-not-allowed"
-                                                                            >
-                                                                                <path
-                                                                                    d="M3 8L6 11L11 3.5"
-                                                                                    strokeWidth={2}
-                                                                                    strokeLinecap="round"
-                                                                                    strokeLinejoin="round"
-                                                                                    className="opacity-0 group-has-[:checked]:opacity-100"
-                                                                                />
-                                                                                <path
-                                                                                    d="M3 7H11"
-                                                                                    strokeWidth={2}
-                                                                                    strokeLinecap="round"
-                                                                                    strokeLinejoin="round"
-                                                                                    className="opacity-0 group-has-[:indeterminate]:opacity-100"
-                                                                                />
-                                                                            </svg>
+                                                                            <CheckBoxIcon />
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <p className="flex-auto text-lg text-gray-900">
-                                                                    <span className="font-medium text-gray-500">{type}: </span> {activity}
-                                                                </p>
-                                                                <div className="min-w-[150px] text-end">
-                                                                    <p className="text-sm lg:text-base sm:leading-6">
-                                                                        {time}
+                                                                <div className="flex flex-col-reverse">
+                                                                    <p className="flex-auto text-sm sm:text-base text-gray-900 text-justify">
+                                                                        <span className="font-semibold text-gray-500">{type}: </span> {activity}
                                                                     </p>
-                                                                    <span className="flex-none text-sm text-gray-500 mt-2">
-                                                                        Duration: {endTime.diff(startTime, 'minute')} Mins
-                                                                    </span>
+                                                                    <div className="flex min-w-[125px] sm:min-w-[145px] text-end mb-2">
+                                                                        <p className="text-sm sm:leading-6 font-semibold">
+                                                                            {time}
+                                                                        </p>
+                                                                        <span className="flex-none text-sm text-gray-500 font-semibold ms-2">
+                                                                            (Duration: {endTime.diff(startTime, 'minute')} Mins)
+                                                                        </span>
+                                                                    </div>
                                                                 </div>
                                                             </>
                                                         </li>
@@ -305,26 +260,30 @@ const PlannerInfoPage = () => {
                                                 })
                                             }
                                         </ul>
+                                        {
+                                            infoData.dayOverview.length - 1 !== key &&
+                                            <div className="relative w-[75%] mx-auto mt-4">
+                                                <div aria-hidden="true" className="absolute inset-0 flex items-center">
+                                                    <div className="w-full border-t border-gray-300" />
+                                                </div>
+                                                <div className="relative flex justify-center">
+                                                    <span className="bg-white px-3 text-xs font-semibold text-gray-900 uppercase tracking-[1px]">Next Day</span>
+                                                </div>
+                                            </div>
+                                        }
                                     </div>
                                 ))
                             }
                         </div>
-                        <div className="learning-resources mb-4">
+                        <div className="learning-resources mb-4 sm:mb-8">
                             <LearningResources learningResources={infoData?.learningResources} />
                         </div>
                         <div className="assessment mb-4">
-                            <div className="relative">
-                                <div aria-hidden="true" className="absolute inset-0 flex items-center">
-                                    <div className="w-full border-t border-gray-300" />
-                                </div>
-                                <div className="relative flex justify-center">
-                                    <span className="bg-white px-3 text-base font-semibold text-gray-900 uppercase">Assessment</span>
-                                </div>
-                            </div>
-                            <ul className='list-disc mt-2 ps-8'>
+                            <Divider>Assessment</Divider>
+                            <ul className='list-disc mt-2 ps-4 sm:ps-8'>
                                 {
                                     infoData.assessment.methods.map((method, index) => (
-                                        <li key={index} className='text-lg'>{method}</li>
+                                        <li key={index} className='text-sm sm:text-base'>{method}</li>
                                     ))
                                 }
                             </ul>

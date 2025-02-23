@@ -51,7 +51,13 @@ const addStudyPlan = asyncHandler(async (req, res) => {
                     isDisable: dayIndex !== 0 || activityIndex !== 0,
                     type: activity.type,
                     time: activity.time,
-                    date: dayjs(day.date, "MMM D, YYYY").format("YYYY-MM-DD"),
+                    date: dayjs(day.date, [
+                        "MMMM D, YYYY",  // Example: January 1, 2024
+                        "MMM D, YYYY",   // Example: Jan 1, 2024
+                        "YYYY-MM-DD",    // Example: 2024-01-01
+                        "MM/DD/YYYY",    // Example: 01/01/2024
+                        "D MMM YYYY",    // Example: 1 Jan 2024
+                    ]).format("YYYY-MM-DD"),
                     activity: activity.activity
                 });
 

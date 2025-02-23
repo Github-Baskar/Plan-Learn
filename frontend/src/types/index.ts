@@ -44,3 +44,27 @@ export type PlannerResponseDataType = {
     },
     adjustments: string[];
 }
+
+export type DataListType = {
+    _id: string;
+    levelOfExpertise: string;
+    studyDuration: string;
+    studyPlanStatus: string;
+    topic: string;
+    totalTimeCommitment: string;
+}[]
+
+export type InfoDataType = {
+    _id: string;
+    topic: string;
+    levelOfExpertise: string;
+    studyDuration: string;
+    studyDays: string[];
+    totalTimeCommitment: string;
+    dayOverview: { [key: string]: any }[];
+    learningResources: { [key: string]: any };
+    assessment: {
+        methods: string[];
+    };
+    studyPlanStatus: string;
+}

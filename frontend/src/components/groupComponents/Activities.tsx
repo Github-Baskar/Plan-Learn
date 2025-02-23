@@ -1,26 +1,19 @@
-// import { TimePicker } from 'antd';
-import dayjs, { Dayjs } from 'dayjs';
-import { Dispatch, SetStateAction } from 'react';
+import dayjs from 'dayjs';
 
-// const { RangePicker: AntTimeRangePicker } = TimePicker;
+import { classNames } from '../../utilities/commonFunction';
 
 type ActivityOverviewProps = {
     activityOverview: { [key: string]: any; }[]
-    setActivitiesData: Dispatch<SetStateAction<{ [key: string]: any; }[]>>
 }
 
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ')
-}
-
-const Activities = ({ activityOverview, setActivitiesData }: ActivityOverviewProps) => {
+const Activities = ({ activityOverview }: ActivityOverviewProps) => {
     return (
         <>
             {
                 activityOverview && activityOverview.map((day, key) => (
                     <div key={key} className="mb-4">
-                        <h3 className='text-lg font-semibold'>{day?.date}</h3>
-                        <ul role="list" className="space-y-6 mt-2 ">
+                        <h3 className='text-sm sm:text-base font-semibold'>{day?.date}</h3>
+                        <ul role="list" className="space-y-3 sm:space-y-4 mt-2">
                             {
                                 day?.activities && day.activities.map((data: { activity: string, type: string, time: string }, index: number) => {
                                     const [startTime, endTime] = data.time.split(" - ").map(time => dayjs(time, "h:mm A"));
@@ -38,48 +31,18 @@ const Activities = ({ activityOverview, setActivitiesData }: ActivityOverviewPro
                                                 <div className="relative flex size-6 flex-none items-center justify-center bg-white">
                                                     <div className="size-1.5 rounded-full bg-gray-100 ring-1 ring-gray-300" />
                                                 </div>
-                                                <p className="flex-auto text-lg text-gray-900">
-                                                    <span className="font-medium text-gray-500">{data.type}: </span> {data.activity}
-                                                </p>
-                                                {/* <div className="">
-                                                    <AntTimeRangePicker
-                                                        className={`time-field w-[200px] rounded-md border border-[#333] hover:border-[#333] focus:shadow-none focus-within:shadow-none focus-within:border-[#333] bg-transparent text-gray-900 shadow-sm placeholder:text-[#5b6780] text-xs lg:text-sm sm:leading-6 h-[45px] md:h-[50px] flex items-center`}
-                                                        format={'hh:mm A'}
-                                                        needConfirm={false}
-                                                        minuteStep={5}
-                                                        onChange={(_value: [Dayjs | null, Dayjs | null] | null, timeString: [string, string]) => {
-                                                            setActivitiesData(prevActivities =>
-                                                                prevActivities.map((activity, activityKey) =>
-                                                                    activityKey === key
-                                                                        ? {
-                                                                            ...activity,
-                                                                            activities: activity.activities.map((act: { time: string }, actIndex: number) =>
-                                                                                actIndex === index
-                                                                                    ? { ...act, time: timeString.join(' - ') }
-                                                                                    : act
-                                                                            )
-                                                                        }
-                                                                        : activity
-                                                                )
-                                                            );
-
-                                                        }}
-                                                        value={
-                                                            startTime && endTime ?
-                                                                [dayjs(startTime, 'hh:mm A'), dayjs(endTime, 'hh:mm A')] : [null, null]
-                                                        }
-                                                    />
-                                                    <span className="flex-none text-base text-gray-500 mt-2">
-                                                        Duration: {endTime.diff(startTime, 'minute')} Mins
-                                                    </span>
-                                                </div> */}
-                                                <div className="min-w-[150px] text-end">
-                                                    <p className="text-sm lg:text-base sm:leading-6">
-                                                        {data.time}
+                                                <div className="flex flex-col-reverse">
+                                                    <p className="flex-auto text-sm sm:text-base text-gray-900 text-justify">
+                                                        <span className="font-semibold text-gray-500">{data.type}: </span> {data.activity}
                                                     </p>
-                                                    <span className="flex-none text-sm text-gray-500 mt-2">
-                                                        Duration: {endTime.diff(startTime, 'minute')} Mins
-                                                    </span>
+                                                    <div className="flex min-w-[125px] sm:min-w-[145px] text-end mb-2">
+                                                        <p className="text-sm sm:leading-6 font-semibold">
+                                                            {data.time}
+                                                        </p>
+                                                        <span className="flex-none text-sm text-gray-500 font-semibold ms-2">
+                                                            (Duration: {endTime.diff(startTime, 'minute')} Mins)
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </>
                                         </li>
@@ -87,6 +50,17 @@ const Activities = ({ activityOverview, setActivitiesData }: ActivityOverviewPro
                                 })
                             }
                         </ul>
+                        {
+                            activityOverview.length - 1 !== key &&
+                            <div className="relative w-[75%] mx-auto mt-4">
+                                <div aria-hidden="true" className="absolute inset-0 flex items-center">
+                                    <div className="w-full border-t border-gray-300" />
+                                </div>
+                                <div className="relative flex justify-center">
+                                    <span className="bg-white px-3 text-xs font-semibold text-gray-900 uppercase tracking-[1px]">Next Day</span>
+                                </div>
+                            </div>
+                        }
                     </div>
                 ))
             }

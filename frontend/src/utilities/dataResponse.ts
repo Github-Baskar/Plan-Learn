@@ -28,7 +28,43 @@ export const ResponseData = {
         "studySchedule": {
             "dayOverview": [
                 {
-                    "date": "February 10, 2025 (Monday)",
+                    "date": "February 9, 2025 (Monday)",
+                    "duration": "4 hours",
+                    "activities": [
+                        {
+                            "time": "1:00 PM - 1:30 PM",
+                            "activity": "Introduction to JavaScript Arrays: What is an array? How to create arrays, access elements, and find the length of an array. (Resource: MDN documentation on Arrays)",
+                            "type": "Learning"
+                        },
+                        {
+                            "time": "1:30 PM - 2:30 PM",
+                            "activity": "Adding and Removing Elements: Learn about `push()`, `pop()`, `shift()`, and `unshift()`. Practice adding and removing elements from arrays using these methods. Focus on the difference between adding to the beginning and end. Example: Create an array of favorite colors. Add and remove colors using these methods. Log the array after each operation.",
+                            "type": "Practice"
+                        },
+                        {
+                            "time": "2:30 PM - 2:45 PM",
+                            "activity": "Break",
+                            "type": "Break"
+                        },
+                        {
+                            "time": "2:45 PM - 3:45 PM",
+                            "activity": "Slicing and Splicing Arrays: Understand `slice()` and `splice()`. Practice extracting portions of an array using `slice()`. Use `splice()` to remove, replace, and insert elements at specific indices. Example: Given an array of numbers, use `slice()` to extract the first three numbers. Then, use `splice()` to remove the second number and insert two new numbers in its place.",
+                            "type": "Practice"
+                        },
+                        {
+                            "time": "3:45 PM - 4:45 PM",
+                            "activity": "Iteration Methods: Learn about `forEach()`, `map()`, and `filter()`. Practice using these methods to iterate through arrays and perform operations on each element. Example: Given an array of names, use `forEach()` to print each name to the console. Use `map()` to create a new array with the length of each name. Use `filter()` to create a new array with names longer than 5 characters.",
+                            "type": "Practice"
+                        },
+                        {
+                            "time": "4:45 PM - 5:00 PM",
+                            "activity": "Review and Quiz: Review all the learned methods. Take a short online quiz to test your understanding.",
+                            "type": "Assessment"
+                        }
+                    ]
+                },
+                {
+                    "date": "February 10, 2025 (Tuesday)",
                     "duration": "4 hours",
                     "activities": [
                         {

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import { profileName } from '../../utilities/commonFunction';
 
 type ProfileLogoProps = {

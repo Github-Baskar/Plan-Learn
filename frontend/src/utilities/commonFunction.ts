@@ -13,7 +13,7 @@ export const formatLabel = (text: string) => {
     return text.replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
-export const validateForm = (formData:{[key:string]:string}, field: string, value: string) => {
+export const validateForm = (formData: { [key: string]: string }, field: string, value: string) => {
     switch (field) {
         case 'name':
             if (!/^[A-Za-z\s]+$/.test(value)) {
@@ -38,4 +38,8 @@ export const validateForm = (formData:{[key:string]:string}, field: string, valu
         default:
             break;
     }
+}
+
+export const classNames = (...classes: string[]) => {
+    return classes.filter(Boolean).join(' ')
 }

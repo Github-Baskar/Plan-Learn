@@ -59,14 +59,14 @@ const NavMenuList = ({
                                 {
                                     userInfo?.name ?
                                         <Button
-                                            className='btn bg-[#00bcd4] text-[#fff] text-[0.8rem] uppercase font-semibold px-3 py-1 w-fit hover:bg-[#fff] hover:text-[#00bcd4] hover:border-[#00bcd4]'
+                                            className='btn !border-[#00bcd4] !text-[rgb(0,188,212)] bg-[rgba(0,188,212,.1)] hover:!bg-[rgba(0,188,212,.2)] text-sm md:text-base px-4 py-2 w-fit h-[30px]'
                                             loading={isLoading}
                                             onClick={signout}
                                         >
                                             Sign out
                                         </Button> :
                                         <Button
-                                            className='btn bg-[#00bcd4] text-[#fff] hover:bg-[rgba(0,188,212,0.8)] text-[0.8rem] uppercase font-semibold px-3 py-1 w-fit'
+                                            className='btn !border-[#00bcd4] !text-[rgb(0,188,212)] bg-[rgba(0,188,212,.1)] hover:!bg-[rgba(0,188,212,.2)] text-sm md:text-base px-4 py-2 w-fit h-[30px]'
                                             onClick={()=>navigate('/sign-in')}
                                         >
                                             Sign in

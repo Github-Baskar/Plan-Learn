@@ -32,3 +32,49 @@ export const dayNameToNumber: { [key: string]: number } = {
     Friday: 5,
     Saturday: 6
 };
+
+export const expertiseLevelOptions = [
+    {
+        label: 'Begineer',
+        value: 'Begineer'
+    },
+    {
+        label: 'Intermediate',
+        value: 'Intermediate'
+    },
+    {
+        label: 'Advanced',
+        value: 'Advanced'
+    }
+]
+
+export const daysOptions = [
+    {
+        label: 'Monday',
+        value: 'Monday'
+    },
+    {
+        label: 'Tuesday',
+        value: 'Tuesday'
+    },
+    {
+        label: 'Wednesday',
+        value: 'Wednesday'
+    },
+    {
+        label: 'Thursday',
+        value: 'Thursday'
+    },
+    {
+        label: 'Friday',
+        value: 'Friday'
+    },
+    {
+        label: 'Saturday',
+        value: 'Saturday'
+    },
+    {
+        label: 'Sunday',
+        value: 'Sunday'
+    }
+]

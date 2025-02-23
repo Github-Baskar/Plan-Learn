@@ -1,26 +1,20 @@
 import { useEffect, useState } from "react"
-import { DeleteIcon } from "../../icons/DeleteIcon"
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, deleteStudyPlan, getStudyPlanInfo, getStudyPlanList, RootState } from "../../store";
 import dayjs from 'dayjs';
-import customParseFormat from "dayjs/plugin/customParseFormat";
 import weekday from "dayjs/plugin/weekday";
 import updateLocale from "dayjs/plugin/updateLocale";
-import { EyeOpenIcon } from "../../icons/EyeOpenIcon";
-import { useNavigate } from "react-router-dom";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+
+import { AppDispatch, deleteStudyPlan, getStudyPlanInfo, getStudyPlanList, RootState } from "../../store";
+import { DataListType } from "../../types";
+
+import { DeleteIcon } from "../../icons/DeleteIcon"
+import Badge from "../baseComponents/Badge";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(weekday);
 dayjs.extend(updateLocale);
-
-type DataListType = {
-    _id: string;
-    levelOfExpertise: string;
-    studyDuration: string;
-    studyPlanStatus: string;
-    topic: string;
-    totalTimeCommitment: string;
-}[]
 
 const MyPlannerPage = () => {
     const { isStudyPlanListLoading, studyPlanList } = useSelector((state: RootState) => state?.studyPlanner);
@@ -31,13 +25,11 @@ const MyPlannerPage = () => {
     useEffect(() => {
         dispatch(getStudyPlanList())
     }, [])
-
     useEffect(() => {
         setDataList(studyPlanList);
     }, [studyPlanList])
-
     return (
-        <div className="flex justify-center items-center">
+        <div className="">
             {
                 isStudyPlanListLoading ?
                     <div className="fixed top-0 left-0 z-50 w-full h-full bg-black/50 flex justify-center items-center">
@@ -52,57 +44,36 @@ const MyPlannerPage = () => {
                     <>
                         {
                             dataList && Array.isArray(dataList) && dataList.length > 0 ?
-                                <div className="grid grid-cols-3 gap-4 w-[80%] my-6">
+                                <div className="flex flex-col items-center sm:grid sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 w-[95%] sm:w-[90%] lg:w-[80%] my-6 mx-auto">
                                     {
                                         dataList.map((studyPlan, index) => {
                                             const { _id, levelOfExpertise, studyDuration, studyPlanStatus, topic, totalTimeCommitment } = studyPlan
                                             return (
-                                                <div
-                                                    key={index}
-                                                    className="bg-white shadow-lg rounded-2xl p-5 border border-gray-200 w-full max-w-md transition-transform duration-300 hover:scale-105"
-                                                >
-                                                    <div className="flex justify-between items-center">
-                                                        <div className="">
-                                                            <h2 className="inline-block text-lg font-semibold text-gray-700 cursor-pointer"
-                                                            >{topic}</h2>
-                                                            <p className="text-sm text-gray-500">{studyDuration}</p>
-                                                        </div>
-                                                        <div className="flex justify-between items-center">
-                                                            <EyeOpenIcon
-                                                                className="w-[25px] h-[25px] me-4"
-                                                                onClick={() => {
-                                                                    dispatch(getStudyPlanInfo(_id, navigate))
-                                                                }}
-                                                            />
-                                                            <DeleteIcon
-                                                                className="w-[25px] h-[25px]"
-                                                                onClick={() => {
-                                                                    dispatch(deleteStudyPlan(_id));
-                                                                    // setDataList(dataList.filter(item => item._id !== _id))
-                                                                }}
-                                                            />
-                                                        </div>
+                                                <div key={index} className="relative group bg-white shadow-lg rounded-2xl p-5 border border-gray-200 transition-transform duration-300 hover:scale-105 w-[300px] sm:w-full cursor-pointer">
+                                                    <h2
+                                                        className="text-base md:text-lg font-semibold underline tracking-[1px] w-[75%] truncate text-blue-600 group-hover:text-blue-800"
+                                                        onClick={() => {
+                                                            dispatch(getStudyPlanInfo(_id, navigate))
+                                                        }}
+                                                    >{topic}</h2>
+                                                    <p className="text-xs md:text-sm text-[#5b6780] font-semibold mt-2">{studyDuration}</p>
+                                                    <div className="absolute top-4 end-4 hover:bg-red-100 p-2 rounded-full">
+                                                        <DeleteIcon
+                                                            className="w-[22px] h-[22px] md:w-[25px] md:h-[25px]"
+                                                            onClick={(e: React.MouseEvent) => {
+                                                                e.stopPropagation();
+                                                                dispatch(deleteStudyPlan(_id));
+                                                            }}
+                                                        />
                                                     </div>
-
-                                                    <div className="mt-3">
-                                                        <p className="text-gray-700">
+                                                    <div className="mt-2 sm:mt-3">
+                                                        <p className="text-sm md:text-base text-[#5b6780]">
                                                             <span className="font-medium">Expertise:</span> {levelOfExpertise}
                                                         </p>
-                                                        <p className="text-gray-700">
-                                                            <span className="font-medium">Session Duration:</span> {totalTimeCommitment}
+                                                        <p className="text-sm md:text-base text-[#5b6780]">
+                                                            <span className="font-medium">Session Dur.:</span> {totalTimeCommitment}
                                                         </p>
-                                                        <span
-                                                            className={`inline-block mt-2 px-3 py-1 text-sm font-semibold rounded-full ${studyPlanStatus === "Complete"
-                                                                ? "bg-green-100 text-green-600"
-                                                                : studyPlanStatus === "On going"
-                                                                    ? "bg-blue-100 text-blue-600"
-                                                                    : studyPlanStatus === "Overdue"
-                                                                        ? "bg-red-100 text-red-600"
-                                                                        : "bg-yellow-100 text-yellow-600"
-                                                                }`}
-                                                        >
-                                                            {studyPlanStatus}
-                                                        </span>
+                                                        <Badge className="mt-2 sm:mt-3">{studyPlanStatus}</Badge>
                                                     </div>
                                                 </div>
                                             )

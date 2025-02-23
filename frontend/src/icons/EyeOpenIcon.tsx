@@ -1,6 +1,6 @@
 type EyeOpenIconProps = {
     className?: string;
-    onClick?: () => void;
+    onClick?: (e: React.MouseEvent) => void;
 }
 
 export const EyeOpenIcon = ({

@@ -13,11 +13,11 @@ const SafeLink = ({ url, children }: SafeLinkProps) => {
         }
     };
     return isValidUrl(url) ? (
-        <a className="text-lg font-semibold text-blue-600 underline hover:text-blue-800 tracking-[2px]" href={url} target="_blank" rel="noopener noreferrer">
+        <a className="text-base font-semibold text-blue-600 underline hover:text-blue-800 tracking-[1px]" href={url} target="_blank" rel="noopener noreferrer">
             {children}
         </a>
     ) : (
-        <span className='text-lg font-semibold underline tracking-[2px]'>{children}</span>
+        <span className='text-base font-semibold underline tracking-[1px]'>{children}</span>
     );
 };
 

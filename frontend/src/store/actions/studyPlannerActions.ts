@@ -85,16 +85,22 @@ export const updateActivity = (params: { id: string }, data: { isComplete: boole
 
 export const deleteStudyPlan = (id: string, navigate?: NavigateFunction) => {
     return async (dispatch: AppDispatch) => {
-        dispatch(setStudyPlanInfoLoading(true));
+        navigate && dispatch(setStudyPlanInfoLoading(true));
         try {
             const { url } = getStudyPlanInfoConfig(id);
             const res = await axios.delete(url);
+            if (navigate) {
+                navigate('/my-plans')
+            } else {
+                dispatch(setStudyPlanListLoading(true));
+                dispatch(getStudyPlanListDispatch([]));
+                dispatch(getStudyPlanList());
+            }
             toast.success(res.data?.message || "Study plan deleted successfully.");
-            navigate ? navigate('/my-plans') : dispatch(getStudyPlanList());
         } catch (error) {
             toast.error(getError(error = {}));
         } finally {
-            dispatch(setStudyPlanInfoLoading(false));
+            navigate && dispatch(setStudyPlanInfoLoading(false));
         }
     };
 }

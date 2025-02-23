@@ -129,7 +129,7 @@ const SignUpPage = () => {
     }
     return (
         <div className="auth-page-wrapper flex flex-1 flex-col justify-center bg-gray h-[100vh]">
-            <div className="bg-white shadow-md rounded-lg sm:mx-auto sm:w-full sm:max-w-[480px] px-4 py-12 sm:px-12">
+            <div className="bg-white border shadow-md rounded-lg sm:mx-auto sm:w-full sm:max-w-[480px] px-4 py-12 sm:px-12">
                 <h1 className='text-[0.8rem] sm:text-[1rem] lg:text-[1.5rem] text-center uppercase tracking-[3px] font-[800]'>Plan & Learn</h1>
                 <form className="mt-8" onSubmit={(e) => onSubmitHandler(e)}>
                     <div className="mb-8">

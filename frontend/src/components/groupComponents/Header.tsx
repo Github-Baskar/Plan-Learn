@@ -1,12 +1,14 @@
 import { useState } from "react";
-import MenuIcon from "../../icons/MenuIcon";
-import NavMenuList from "./NavMenuList";
-import { Drawer as AntDrawer } from "antd";
-import ProfileLogo from "../baseComponents/ProfileLogo";
-import Button from "../baseComponents/Button";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { Drawer as AntDrawer } from "antd";
+
 import { AppDispatch, RootState, signoutUser } from "../../store";
+import NavMenuList from "./NavMenuList";
+
+import Button from "../baseComponents/Button";
+import ProfileLogo from "../baseComponents/ProfileLogo";
+import MenuIcon from "../../icons/MenuIcon";
 
 const Header = () => {
     const navigate = useNavigate();
@@ -18,7 +20,7 @@ const Header = () => {
     return (
         <nav className="flex justify-center items-center sticky top-0 z-[100] h-[80px] shadow-md bg-white">
             <div className="header-content flex justify-between items-center w-[100%] md:w-[90%] lg:w-[80%] p-4 md:p-0">
-                <h1 className='text-[0.8rem] sm:text-[1rem] lg:text-[1.5rem] uppercase tracking-[3px] font-[800] text-[#00bcd4]'>Plan & Learn</h1>
+                <h1 className='text-base lg:text-lg uppercase tracking-[3px] font-[800] text-[#00bcd4]'>Plan & Learn</h1>
                 <div className="hidden md:block">
                     <NavMenuList
                         isLoading={isLoading}
@@ -37,7 +39,7 @@ const Header = () => {
                 </button>
                 <AntDrawer
                     title={
-                        <h1 className='text-[1rem] uppercase tracking-[3px] font-[800] my-3'>Plan & Learn</h1>
+                        <h1 className='text-base lg:text-lg text-[#00bcd4] uppercase tracking-[3px] font-[800] my-3'>Plan & Learn</h1>
                     }
                     placement={'right'}
                     closable={false}
@@ -48,19 +50,19 @@ const Header = () => {
                     width={300}
                     footer={
                         <div className="flex justify-between items-center">
-                            <div className="flex items-center">
+                            <div className="flex items-center cursor-pointer" title={userInfo?.name || 'Guest User'}>
                                 <ProfileLogo
                                     imageURL={userInfo?.picture || ''}
                                     name={userInfo?.name || 'Guest User'}
                                 />
                                 <div className="ms-2">
-                                    <p className='font-semibold text-[#333] text-[1rem] tracking-[1px]'>{'Guest User'}</p>
+                                    <p className='font-semibold text-[#333] text-[1rem] tracking-[1px]'>{userInfo?.name || 'Guest User'}</p>
                                 </div>
                             </div>
                             {
                                 userInfo?.name ?
                                     <Button
-                                        className='btn bg-[#00bcd4] text-[#fff] text-[0.8rem] uppercase font-semibold px-3 py-1 w-fit hover:bg-[#fff] hover:text-[#00bcd4] hover:border-[#00bcd4]'
+                                        className='btn !border-[#00bcd4] !text-[rgb(0,188,212)] bg-[rgba(0,188,212,.1)] hover:!bg-[rgba(0,188,212,.2)] text-sm md:text-base px-4 py-2 w-fit h-[30px]'
                                         loading={isLoading}
                                         onClick={() => {
                                             setIsLoading(true);
@@ -71,7 +73,7 @@ const Header = () => {
                                         Sign out
                                     </Button> :
                                     <Button
-                                        className='btn bg-[#00bcd4] text-[#fff] hover:bg-[rgba(0,188,212,0.8)] text-[0.8rem] uppercase font-semibold px-3 py-1 w-fit'
+                                        className='btn !border-[#00bcd4] !text-[rgb(0,188,212)] bg-[rgba(0,188,212,.1)] hover:!bg-[rgba(0,188,212,.2)] text-sm md:text-base px-4 py-2 w-fit h-[30px]'
                                         onClick={() => {
                                             setIsDrawerOpen(false)
                                             navigate('/sign-in')
