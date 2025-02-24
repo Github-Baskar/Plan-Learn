@@ -149,14 +149,14 @@ const AddPlannerPage = () => {
     return (
         <div className="flex flex-col justify-center items-center">
             <div className="banner-section relative w-full h-[40vh] md:h-[50vh]">
-                <div className="img absolute left-0 -z-20 h-[40vh] md:h-[50vh] bg-[url('/planning.jpg')] bg-no-repeat bg-center bg-cover w-full"></div>
-                <div className="color absolute left-0 -z-10 h-[40vh] md:h-[50vh] bg-black/65 to-transparent w-full"></div>
-                <div className="text-white text-start flex flex-col justify-center w-[95%] sm:w-[90%] lg:w-[80%] h-[40vh] md:h-[50vh] mx-auto">
+                <div className="img absolute left-0 z-[1] h-[40vh] md:h-[50vh] bg-[url('/planning.jpg')] bg-no-repeat bg-center bg-cover w-[100%]"></div>
+                <div className="color absolute left-0 z-[2] h-[40vh] md:h-[50vh] bg-black/65 to-transparent w-full"></div>
+                <div className="relative z-10 text-white text-start flex flex-col justify-center w-[95%] sm:w-[90%] lg:w-[80%] h-[40vh] md:h-[50vh] mx-auto">
                     <h1 className="text-xl sm:text-2xl md:text-3xl font-bold md:font-semibold mb-5 md:mb-6">Plan Smarter, Achieve Faster with Gemini AI! 🚀</h1>
                     <p className="text-base md:text-lg font-semibold md:font-medium w-[95%] sm:w-[90%] lg:w-[75%] xl:w-[60%]">Take control of your time and goals with AI-powered scheduling. Create a personalized plan tailored to your needs and stay on track effortlessly.</p>
                 </div>
             </div>
-            <div className="card bg-white shadow-md rounded-lg p-4 md:p-8 w-[95%] md:w-[80%] -mt-8 md:-mt-16">
+            <div className="relative z-10 card bg-white shadow-md rounded-lg p-4 md:p-8 w-[95%] md:w-[80%] -mt-8 md:-mt-16">
                 <form onSubmit={submitHandler}>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         <input
