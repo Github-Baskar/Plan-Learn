@@ -9,7 +9,7 @@ import { isActivityOverdue } from '../utils/helper.js';
 // route        POST /api/study-plan/add
 // @access      Private
 const addStudyPlan = asyncHandler(async (req, res) => {
-    const { userId, levelOfExpertise, studyDays, studyDuration, topic, totalTimeCommitment, assessment, dayOverview, learningResources } = req.body;
+    const { userId, levelOfExpertise, studyDays, studyDuration, studyTime, topic, totalTimeCommitment, assessment, dayOverview, learningResources } = req.body;
 
     if (!userId) {
         res.status(400);
@@ -21,6 +21,7 @@ const addStudyPlan = asyncHandler(async (req, res) => {
         levelOfExpertise,
         studyDays,
         studyDuration,
+        studyTime,
         topic,
         totalTimeCommitment,
         assessment,
@@ -92,9 +93,12 @@ const getStudyPlanList = asyncHandler(async (req, res) => {
         _id: 1,
         topic: 1,
         studyDuration: 1,
+        studyTime: 1,
+        studyDays: 1,
         levelOfExpertise: 1,
         totalTimeCommitment: 1,
-        dayOverview: 1
+        dayOverview: 1,
+        createdAt: 1,
     }).lean();
     if (!studyPlanList) {
         res.status(204);
@@ -184,6 +188,7 @@ const getStudyPlanInfo = asyncHandler(async (req, res) => {
         _id: 1,
         topic: 1,
         studyDuration: 1,
+        studyTime: 1,
         levelOfExpertise: 1,
         totalTimeCommitment: 1,
         studyDays: 1,

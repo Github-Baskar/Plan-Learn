@@ -34,6 +34,7 @@ const PlannerInfoPage = () => {
         topic: '',
         levelOfExpertise: '',
         studyDuration: '',
+        studyTime: '',
         studyDays: [],
         totalTimeCommitment: '',
         dayOverview: [],
@@ -51,7 +52,7 @@ const PlannerInfoPage = () => {
     }, [id])
     useEffect(() => {
         if (studyPlanInfo) {
-            const { _id, topic, levelOfExpertise, studyDuration, studyDays, totalTimeCommitment, dayOverview, learningResources, assessment: { methods }, studyPlanStatus } = studyPlanInfo;
+            const { _id, topic, levelOfExpertise, studyDuration, studyTime, studyDays, totalTimeCommitment, dayOverview, learningResources, assessment: { methods }, studyPlanStatus } = studyPlanInfo;
 
             const [start, end] = studyDuration.split(" - ");
             const formattedStart = dayjs(start, "MMM D, YYYY").format("MMM D, YYYY");
@@ -69,6 +70,7 @@ const PlannerInfoPage = () => {
                 topic,
                 levelOfExpertise,
                 studyDuration: `${formattedStart} - ${formattedEnd}`,
+                studyTime,
                 studyDays: getShortDay(studyDays),
                 totalTimeCommitment,
                 dayOverview: Array.isArray(dayOverview) ? dayOverview : [],
@@ -138,6 +140,12 @@ const PlannerInfoPage = () => {
                                 <div className="self-center mx-auto">
                                     <h2 className='text-base sm:text-xs md:text-sm lg:text-base font-semibold'>{infoData?.studyDuration}</h2>
                                     <p className='text-sm sm:text-xs lg:text-sm text-[#5b6780] font-medium'>Study Plan Duration</p>
+                                </div>
+                            </div>
+                            <div className="border-b sm:border-b-0 sm:border-r border-gray-300 flex justify-center items-center py-2 sm:px-2 sm:py-0 grow">
+                                <div className="self-center mx-auto">
+                                    <h2 className='text-base sm:text-xs md:text-sm lg:text-base font-semibold'>{infoData?.studyTime}</h2>
+                                    <p className='text-sm sm:text-xs lg:text-sm text-[#5b6780] font-medium'>Preferred Time</p>
                                 </div>
                             </div>
                             <div className="border-b sm:border-b-0 sm:border-r border-gray-300 flex justify-center items-center py-2 sm:px-2 sm:py-0 grow">

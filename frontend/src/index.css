@@ -2,20 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-.active{
+.active {
     color: #00bcd4;
 }
 
-.ant-select .ant-select-selector .ant-select-selection-wrap{
+.ant-select .ant-select-selector .ant-select-selection-wrap {
     align-self: unset !important;
     /* padding: 10px 0px 10px 10px; */
 }
 
-.ant-select .ant-select-selector{
+.ant-select .ant-select-selector {
     border: none !important;
     box-shadow: none !important;
 }
-.ant-select:focus-visible, .ant-select .ant-select-selector:focus-visible{
+
+.ant-select:focus-visible,
+.ant-select .ant-select-selector:focus-visible {
     outline: none !important;
 }
 
@@ -24,7 +26,31 @@
     border: none !important;
 }
 
-.ant-select-selection-placeholder{
-    color: rgba(0,0,0,0.25) !important;
+.ant-select-selection-placeholder {
+    color: rgba(0, 0, 0, 0.25) !important;
     font-size: .9rem;
+}
+
+@media (max-width: 639px) {
+    .ant-picker-dropdown{
+        min-width: unset !important;
+    }
+
+    .ant-picker-date-range-wrapper .ant-picker-panel:last-child {
+        width: 0;
+    }
+    
+    .ant-picker-date-range-wrapper .ant-picker-panel:last-child .ant-picker-header {
+        position: absolute;
+        right: 0;
+    }
+    
+    .ant-picker-date-range-wrapper .ant-picker-panel:last-child .ant-picker-header .ant-picker-header-prev-btn,
+    .ant-picker-date-range-wrapper .ant-picker-panel:last-child .ant-picker-header .ant-picker-header-view {
+        visibility: hidden;
+    }
+    
+    .ant-picker-date-range-wrapper .ant-picker-panel:last-child .ant-picker-body {
+        display: none;
+    }
 }

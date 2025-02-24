@@ -31,6 +31,7 @@ export type PlannerResponseDataType = {
     topic: string;
     levelOfExpertise: string;
     studyDuration: string;
+    studyTime: string;
     studyDays: string[];
     totalTimeCommitment: string;
     significance: string;
@@ -49,9 +50,12 @@ export type DataListType = {
     _id: string;
     levelOfExpertise: string;
     studyDuration: string;
+    studyTime: string;
+    studyDays: string[];
     studyPlanStatus: string;
     topic: string;
     totalTimeCommitment: string;
+    createdAt: Date;
 }[]
 
 export type InfoDataType = {
@@ -59,6 +63,7 @@ export type InfoDataType = {
     topic: string;
     levelOfExpertise: string;
     studyDuration: string;
+    studyTime: string;
     studyDays: string[];
     totalTimeCommitment: string;
     dayOverview: { [key: string]: any }[];

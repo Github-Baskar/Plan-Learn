@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export const profileName = (name: string) => {
     let result = "";
     let processedName = name ? name.split(" ") : "NA"
@@ -43,3 +45,33 @@ export const validateForm = (formData: { [key: string]: string }, field: string,
 export const classNames = (...classes: string[]) => {
     return classes.filter(Boolean).join(' ')
 }
+
+export const convertToHoursAndMinutes = (time: string): string => {
+    const match = time.match(/(\d+(?:\.\d+)?)\s*(?:hours?|hrs?)?(?:\s*(\d+(?:\.\d+)?)\s*(?:minutes?|mins?))?/i);
+
+    if (!match) return "";
+
+    let hours = parseFloat(match[1] ?? "0");
+    let minutes = parseFloat(match[2] ?? "0");
+
+    if (hours % 1 !== 0) {
+        minutes += (hours % 1) * 60;
+        hours = Math.floor(hours);
+    }
+
+    return `${hours > 0 ? `${hours} hr${hours > 1 ? "s" : ""}` : ""}${minutes > 0 ? ` ${minutes} min${minutes > 1 ? "s" : ""}` : ""}`.trim();
+};
+
+export const extractFormattedDate = (dateString: string): string[] => {
+    const match = dateString.match(/(\w{3,} \d{1,2}, \d{4}|\d{4}-\d{2}-\d{2})/g);
+    if (!match || match.length < 2) return [];
+    return match.map(
+        date => dayjs(date, [
+            "MMMM D, YYYY",
+            "MMM D, YYYY",
+            "YYYY-MM-DD",
+            "MM/DD/YYYY",
+            "D MMM YYYY",
+        ]).format("MMM D, YYYY")
+    );
+};

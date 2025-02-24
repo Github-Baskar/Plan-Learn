@@ -27,10 +27,10 @@ export const authUser = (data: { [key: string]: string }, navigate: NavigateFunc
         try {
             const { url } = getAuthUserConfig();
             const res = await axios.post(url, data);
-            const [picture] = rest
+            const [from, picture] = rest
             dispatch(setCredentialsDispatch({ ...res.data, picture }));
             toast.success('Signed in successfully! Welcome back!');
-            navigate('/');
+            navigate(from, { replace: true });
         } catch (error) {
             toast.error(getError(error = {}));
         } finally {

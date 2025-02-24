@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { TokenResponse, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
@@ -17,6 +17,8 @@ import { EyeCloseIcon } from "../../icons/EyeCloseIcon";
 const SignInPage = () => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from || "/"; 
     const { userInfo } = useSelector((state: RootState) => state.auth);
     const [user, setUser] = useState<TokenResponse | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -76,7 +78,7 @@ const SignInPage = () => {
     });
     useEffect(() => {
         if (userInfo) {
-            navigate('/');
+            navigate(from, { replace: true });
         }
     }, [navigate, userInfo]);
     useEffect(() => {
@@ -96,10 +98,10 @@ const SignInPage = () => {
     const signInUser = async (data: { [key: string]: string }, setIsLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
         const { email, password, picture } = data
         if (email && password) {
-            await dispatch(authUser({ email, password }, navigate))
+            await dispatch(authUser({ email, password }, navigate, from))
         } else if (email && picture) {
             setIsLoading(true);
-            await dispatch(authUser({ email }, navigate, picture));
+            await dispatch(authUser({ email }, navigate, from, picture));
         }
         resetField();
         setIsLoading(false);
