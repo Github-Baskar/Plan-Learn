@@ -45,7 +45,7 @@ const studyPlanSchema = new mongoose.Schema(
                 image: String,
             }],
             onlineCourses: [{
-                courseTitle: String,
+                title: String,
                 description: String,
                 link: String,
                 platform: String,

@@ -48,7 +48,7 @@ const MyPlannerPage = () => {
                     <>
                         {
                             dataList && Array.isArray(dataList) && dataList.length > 0 ?
-                                <div className="flex flex-col items-center sm:grid sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 w-[95%] sm:w-[90%] lg:w-[80%] my-6 mx-auto">
+                                <div className="flex flex-col items-center sm:grid sm:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8 w-[95%] sm:w-[90%] lg:w-[80%] my-6 mx-auto">
                                     {
                                         dataList.map((studyPlan, index) => {
                                             const { _id, studyDuration, studyTime, studyDays, studyPlanStatus, topic, totalTimeCommitment, createdAt } = studyPlan
@@ -67,15 +67,18 @@ const MyPlannerPage = () => {
                                                         Array.isArray(studyDays) && studyDays.length > 0 &&
                                                         <div className="mt-2 sm:mt-3">
                                                             <p className="text-xs md:text-sm text-[#5b6780] font-semibold">Preferred Days:</p>
-                                                            <div className="flex gap-2 mt-2">
+                                                            <div className="flex flex-wrap gap-2 mt-2">
                                                                 {
-                                                                    studyDays.map((studyDay, index) => {
+                                                                    studyDays.length !== 7 ? studyDays.map((studyDay, index) => {
                                                                         return (
                                                                             <span key={index} className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs md:text-sm font-semibold text-gray-600 ring-1 ring-gray-500/10 ring-inset">
                                                                                 {studyDay}
                                                                             </span>
                                                                         )
-                                                                    })
+                                                                    }) :
+                                                                        <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs md:text-sm font-semibold text-gray-600 ring-1 ring-gray-500/10 ring-inset">
+                                                                            All Days
+                                                                        </span>
                                                                 }
                                                             </div>
                                                         </div>

@@ -71,7 +71,6 @@ const AddPlannerPage = () => {
         if (generateStudyPlan['personalizedStudyPlan']) {
             const { userProfile, topicOverview, learningObjectives, studySchedule: { dayOverview }, learningResources, assessment: { methods, frequency }, adjustments: { guidance } } = generateStudyPlan?.personalizedStudyPlan;
             const [start, end] = extractFormattedDate(userProfile?.studyDuration);
-            console.log(userProfile, start, end);
             const getShortDay = (fullDays: string[]): string[] => {
                 return fullDays.map(day => {
                     const dayNumber = dayNameToNumber[day];

@@ -2,8 +2,7 @@ import asyncHandler from 'express-async-handler';
 import StudyPlan from '../models/studyPlanModel.js';
 import DayOverview from '../models/dayOverviewModel.js';
 import Activity from '../models/activityModel.js';
-import dayjs from 'dayjs';
-import { isActivityOverdue } from '../utils/helper.js';
+import { extractFormattedDate, isActivityOverdue } from '../utils/helper.js';
 
 // @desc        Add study plan
 // route        POST /api/study-plan/add
@@ -52,13 +51,7 @@ const addStudyPlan = asyncHandler(async (req, res) => {
                     isDisable: dayIndex !== 0 || activityIndex !== 0,
                     type: activity.type,
                     time: activity.time,
-                    date: dayjs(day.date, [
-                        "MMMM D, YYYY",  // Example: January 1, 2024
-                        "MMM D, YYYY",   // Example: Jan 1, 2024
-                        "YYYY-MM-DD",    // Example: 2024-01-01
-                        "MM/DD/YYYY",    // Example: 01/01/2024
-                        "D MMM YYYY",    // Example: 1 Jan 2024
-                    ]).format("YYYY-MM-DD"),
+                    date: extractFormattedDate(day.date),
                     activity: activity.activity
                 });
 
@@ -201,11 +194,11 @@ const getStudyPlanInfo = asyncHandler(async (req, res) => {
         throw new Error('No records.')
     }
 
+    let allCompleted = true;
+    let allPending = true;
+    let isOverdue = false;
     const dayOverviewInfo = await Promise.all(
         studyPlanInfo.dayOverview.map(async (overviewId) => {
-            let allCompleted = true;
-            let allPending = true;
-            let isOverdue = false;
             const dayOverview = await DayOverview.findById(overviewId, {
                 _id: 1,
                 date: 1,

@@ -9,11 +9,11 @@ const Badge = ({
 }: BadgeProps) => {
     return (
         <span
-            className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${className} ${children === "Complete"
+            className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${className} ${children.toLowerCase() === "complete"
                 ? "bg-green-100 text-green-600"
-                : children === "On going"
+                : children.toLowerCase() === "on going"
                     ? "bg-blue-100 text-blue-600"
-                    : children === "Overdue"
+                    : children.toLowerCase() === "overdue"
                         ? "bg-red-100 text-red-600"
                         : "bg-yellow-100 text-yellow-600"
                 }`}
