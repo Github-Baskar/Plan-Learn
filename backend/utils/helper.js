@@ -17,16 +17,12 @@ export const isActivityOverdue = (activity) => {
     return activityEndDateTime.isBefore(currentTime) && !activity.isComplete;
 };
 
-export const extractFormattedDate = (dateString) => {
-    const match = dateString.match(/(\w{3,} \d{1,2}, \d{4}|\d{4}-\d{2}-\d{2})/g);
-    if (!match || match.length < 2) return [];
-    return match.map(
-        date => dayjs(date, [
-            "MMMM D, YYYY",
-            "MMM D, YYYY",
-            "YYYY-MM-DD",
-            "MM/DD/YYYY",
-            "D MMM YYYY",
-        ]).format("YYYY-MM-DD")
-    );
+export const extractFormattedDate = (date) => {
+    return dayjs(date, [
+        "MMMM D, YYYY",
+        "MMM D, YYYY",
+        "YYYY-MM-DD",
+        "MM/DD/YYYY",
+        "D MMM YYYY",
+    ]).format("YYYY-MM-DD")
 };
