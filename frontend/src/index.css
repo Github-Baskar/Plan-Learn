@@ -54,3 +54,7 @@
         display: none;
     }
 }
+
+.ant-picker-time-panel .ant-picker-time-panel-column {
+    overflow-y: auto !important;
+}
