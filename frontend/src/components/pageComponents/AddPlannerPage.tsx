@@ -182,6 +182,7 @@ const AddPlannerPage = () => {
                                     Array.isArray(dateRange) && dateRange.length === 2 && dateRange[0] && dateRange[1] ?
                                         [dayjs(dateRange[0], 'DD-MM-YYYY'), dayjs(dateRange[1], 'DD-MM-YYYY')] : [null, null]
                                 }
+                                inputReadOnly={true}
                             />
                             <AntTimeRangePicker
                                 className={`time-field w-full rounded-md border border-[#333] hover:border-[#333] focus:shadow-none focus-within:shadow-none focus-within:border-[#333] bg-transparent text-gray-900 shadow-sm placeholder:text-[rgba(0,0,0,0.25)] sm:leading-6 h-[45px] md:h-[50px] flex items-center`}
@@ -195,6 +196,7 @@ const AddPlannerPage = () => {
                                     Array.isArray(timeRange) && timeRange.length === 2 && timeRange[0] && timeRange[1] ?
                                         [dayjs(timeRange[0], 'hh:mm A'), dayjs(timeRange[1], 'hh:mm A')] : [null, null]
                                 }
+                                inputReadOnly={true}
                             />
                             <AntSelect
                                 className={`select-field block w-full rounded-md border border-[#6b7280] bg-transparent shadow-sm placeholder:text-[rgba(0,0,0,0.25)] sm:leading-6 min-h-[45px] md:min-h-[50px]`}
