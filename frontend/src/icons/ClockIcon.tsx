@@ -2,7 +2,7 @@ type ClockIconProps = {
     className?: string;
 }
 
-const ClockIcon = ({
+export const ClockIcon = ({
     className,
 }: ClockIconProps) => {
     return (
@@ -22,5 +22,3 @@ const ClockIcon = ({
         </svg>
     )
 }
-
-export default ClockIcon

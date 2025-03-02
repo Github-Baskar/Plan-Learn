@@ -7,17 +7,14 @@ import weekday from "dayjs/plugin/weekday";
 import updateLocale from "dayjs/plugin/updateLocale";
 
 import { AppDispatch, deleteStudyPlan, getStudyPlanInfo, RootState, updateActivity } from "../../store";
-import { dayNameToNumber } from "../../utilities/constants";
+import { classNames, getShortDay } from "../../utilities/commonFunction";
+import { InfoDataType } from "../../types";
 
 import LearningResources from "../groupComponents/LearningResources";
-import { DeleteIcon } from "../../icons/DeleteIcon"
-import { BackIcon } from "../../icons/BackIcon";
-import { classNames } from "../../utilities/commonFunction";
-import { InfoDataType } from "../../types";
 import Badge from "../baseComponents/Badge";
 import Divider from "../baseComponents/Divider";
-import CheckBoxIcon from "../../icons/CheckBoxIcon";
 import PlannerInfoLoader from "../../skeletonLoaders/PlannerInfoLoader";
+import { BackIcon, CheckBoxIcon, DeleteIcon } from "../../icons";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(weekday);
@@ -57,13 +54,6 @@ const PlannerInfoPage = () => {
             const [start, end] = studyDuration.split(" - ");
             const formattedStart = dayjs(start, "MMM D, YYYY").format("MMM D, YYYY");
             const formattedEnd = dayjs(end, "MMM D, YYYY").format("MMM D, YYYY");
-
-            const getShortDay = (fullDays: string[]): string[] => {
-                return fullDays.map(day => {
-                    const dayNumber = dayNameToNumber[day];
-                    return dayNumber !== undefined ? dayjs().day(dayNumber).format("ddd") : day;
-                });
-            };
 
             const newData = {
                 _id,

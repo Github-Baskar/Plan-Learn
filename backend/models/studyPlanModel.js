@@ -19,8 +19,22 @@ const studyPlanSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        duration: {
+            type: {
+                start: Date,
+                end: Date,
+            },
+            required: true
+        },
         studyTime: {
             type: String,
+            required: true
+        },
+        time: {
+            type: {
+                start: String,
+                end: String,
+            },
             required: true
         },
         topic: {

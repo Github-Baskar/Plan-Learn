@@ -1,8 +1,99 @@
 import asyncHandler from 'express-async-handler';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat.js';
+import isBetween from 'dayjs/plugin/isBetween.js';
+
 import StudyPlan from '../models/studyPlanModel.js';
 import DayOverview from '../models/dayOverviewModel.js';
 import Activity from '../models/activityModel.js';
-import { extractFormattedDate, isActivityOverdue } from '../utils/helper.js';
+import { extractFormattedDate, formatDateString, formatTimeString, isActivityOverdue } from '../utils/helper.js';
+
+dayjs.extend(customParseFormat);
+dayjs.extend(isBetween);
+
+const checkOverlappingStudyPlans = async (userId, schedule, dateRange, timeRange) => {
+    // Parse dateRange into start and end dates
+    const [startDateStr, endDateStr] = dateRange;
+    const startDate = dayjs(startDateStr, 'DD-MM-YYYY').format("YYYY-MM-DD");
+    const endDate = dayjs(endDateStr, 'DD-MM-YYYY').format("YYYY-MM-DD");
+
+    // Parse timeRange into start and end times
+    const [startTimeStr, endTimeStr] = timeRange;
+    const startTime = dayjs(startTimeStr, "hh:mm A").format("HH:mm");
+    const endTime = dayjs(endTimeStr, "hh:mm A").format("HH:mm");
+
+    // Ensure schedule is an array
+    if (!Array.isArray(schedule)) {
+        throw new Error('Schedule must be an array');
+    }
+
+    // Query the database for overlapping study plans
+    const overlappingPlans = await StudyPlan.find({
+        userId,
+        studyDays: { $in: schedule },
+        $and: [
+            {
+                // Duration overlapping conditions
+                $or: [
+                    {
+                        // Case 1: New plan starts during an existing plan
+                        'duration.start': { $lte: startDate },
+                        'duration.end': { $gte: startDate },
+                    },
+                    {
+                        // Case 2: New plan ends during an existing plan
+                        'duration.start': { $lte: endDate },
+                        'duration.end': { $gte: endDate },
+                    },
+                    {
+                        // Case 3: New plan completely overlaps an existing plan
+                        'duration.start': { $gte: startDate },
+                        'duration.end': { $lte: endDate },
+                    },
+                ],
+            },
+            {
+                // Time overlapping conditions (evaluated only if duration overlapping occurs)
+                $or: [
+                    {
+                        // Check if new time overlaps with an existing time slot
+                        $and: [
+                            { 'time.start': { $lt: endTime } },
+                            { 'time.end': { $gt: startTime } }
+                        ]
+                    },
+                    { 'time.start': startTime }, // Exact match on start time
+                    { 'time.end': endTime } // Exact match on end time
+                ],
+            }
+        ]
+    });
+
+    return overlappingPlans;
+};
+
+// @desc        Checking study plan overlapping
+// route        POST /api/study-plan/overlapping
+// @access      Private
+const overLappingStudyPlan = asyncHandler(async (req, res) => {
+    const { userId, dateRange, schedule, timeRange } = req.body;
+
+    if (!userId) {
+        res.status(400);
+        throw new Error('User ID is required');
+    }
+
+    const overlappingPlans = await checkOverlappingStudyPlans(userId, schedule, dateRange, timeRange);
+
+    if (overlappingPlans.length > 0) {
+        res.status(400);
+        throw new Error('Study plan is overlapping with existing study plan');
+    } else {
+        res.status(200).json({
+            message: "No overlapping study plans found",
+        });
+    }
+});
 
 // @desc        Add study plan
 // route        POST /api/study-plan/add
@@ -15,12 +106,25 @@ const addStudyPlan = asyncHandler(async (req, res) => {
         throw new Error('User ID is required');
     }
 
+    const [startDate, endDate] = formatDateString(studyDuration);
+    const [startTime, endTime] = formatTimeString(studyTime);
+    const duration = {
+        start: extractFormattedDate(startDate),
+        end: extractFormattedDate(endDate),
+    }
+    const time = {
+        start: dayjs(startTime, "hh:mm A").format("HH:mm"),
+        end: dayjs(endTime, "hh:mm A").format("HH:mm"),
+    }
+
     const newStudyPlan = new StudyPlan({
         userId,
         levelOfExpertise,
         studyDays,
-        studyDuration,
+        studyDuration: `${startDate && endDate ? `${startDate} - ${endDate}` : ''}`,
+        duration,
         studyTime,
+        time,
         topic,
         totalTimeCommitment,
         assessment,
@@ -95,7 +199,7 @@ const getStudyPlanList = asyncHandler(async (req, res) => {
     }).lean();
     if (!studyPlanList) {
         res.status(204);
-        throw new Error('No records.')
+        throw new Error('No records')
     }
     const data = await Promise.all(
         studyPlanList.map(async (studyPlan) => {
@@ -165,7 +269,7 @@ const getStudyPlanList = asyncHandler(async (req, res) => {
         });
     } else {
         res.status(204);
-        throw new Error('No records.')
+        throw new Error('No records')
     }
 });
 
@@ -191,7 +295,7 @@ const getStudyPlanInfo = asyncHandler(async (req, res) => {
     }).lean()
     if (!studyPlanInfo) {
         res.status(204);
-        throw new Error('No records.')
+        throw new Error('No records')
     }
 
     let allCompleted = true;
@@ -256,7 +360,7 @@ const getStudyPlanInfo = asyncHandler(async (req, res) => {
         });
     } else {
         res.status(204);
-        throw new Error('No records.')
+        throw new Error('No records')
     }
 });
 
@@ -312,7 +416,7 @@ const updateStudyPlanActivity = asyncHandler(async (req, res) => {
     if (activity) {
         const { _id, dayOverviewId, isDisable } = activity
         res.status(200).json({
-            message: 'Activity updated successfully.',
+            message: 'Activity updated successfully',
             response: {
                 _id,
                 dayOverviewId,
@@ -323,7 +427,7 @@ const updateStudyPlanActivity = asyncHandler(async (req, res) => {
         });
     } else {
         res.status(204);
-        throw new Error('No records.')
+        throw new Error('No records')
     }
 })
 
@@ -336,7 +440,7 @@ const deleteStudyPlan = asyncHandler(async (req, res) => {
     const studyPlanExists = await StudyPlan.findById(id);
     if (!studyPlanExists) {
         res.status(400);
-        throw new Error('Study plan not exists.');
+        throw new Error('Study plan not exists');
     }
 
     await Promise.all([
@@ -347,15 +451,16 @@ const deleteStudyPlan = asyncHandler(async (req, res) => {
 
     if (studyPlan) {
         res.status(200).json({
-            message: 'Study plan deleted successfully.'
+            message: 'Study plan deleted successfully'
         });
     } else {
         res.status(204);
-        throw new Error('No records.')
+        throw new Error('No records')
     }
 })
 
 export {
+    overLappingStudyPlan,
     addStudyPlan,
     getStudyPlanList,
     getStudyPlanInfo,

@@ -14,7 +14,7 @@ export const registerUser = (data: { [key: string]: string }, navigate: Navigate
             toast.success('Account created successfully! Welcome aboard!');
             navigate('/');
         } catch (error) {
-            toast.error(getError(error = {}));
+            toast.error(getError(error));
         } finally {
             dispatch(setAuthLoading(false));
         }
@@ -32,7 +32,7 @@ export const authUser = (data: { [key: string]: string }, navigate: NavigateFunc
             toast.success('Signed in successfully! Welcome back!');
             navigate(from, { replace: true });
         } catch (error) {
-            toast.error(getError(error = {}));
+            toast.error(getError(error));
         } finally {
             dispatch(setAuthLoading(false));
         }
@@ -49,7 +49,7 @@ export const signoutUser = (navigate: NavigateFunction) => {
             toast.success('Signed out successfully. See you next time!');
             navigate('/');
         } catch (error) {
-            toast.error(getError(error = {}));
+            toast.error(getError(error));
         } finally {
             dispatch(setAuthLoading(false));
         }

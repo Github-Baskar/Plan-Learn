@@ -10,17 +10,16 @@ import updateLocale from "dayjs/plugin/updateLocale";
 
 import { addStudyPlan, AppDispatch, getGenerateStudyPlan, RootState } from '../../store';
 import { AddPlannerDataType, PlannerResponseDataType } from '../../types';
-import { dayNameToNumber, daysOptions, expertiseLevelOptions, generateAiPrompt } from '../../utilities/constants';
+import { daysOptions, expertiseLevelOptions, generateAiPrompt } from '../../utilities/constants';
+import { convertToHoursAndMinutes, extractFormattedDate, getShortDay } from '../../utilities/commonFunction';
 
 import Button from '../baseComponents/Button';
 import Activities from '../groupComponents/Activities';
 import LearningResources from '../groupComponents/LearningResources';
-import { AddEventIcon } from '../../icons/AddEventIcon';
 import AILoader from '../baseComponents/AILoader';
 import Divider from '../baseComponents/Divider';
 import Modal from '../baseComponents/Modal';
-import AuthIcon from '../../icons/AuthIcon';
-import { convertToHoursAndMinutes, extractFormattedDate } from '../../utilities/commonFunction';
+import { AddEventIcon, AuthIcon } from '../../icons';
 
 dayjs.extend(customParseFormat);
 dayjs.extend(weekday);
@@ -71,12 +70,6 @@ const AddPlannerPage = () => {
         if (generateStudyPlan['personalizedStudyPlan']) {
             const { userProfile, topicOverview, learningObjectives, studySchedule: { dayOverview }, learningResources, assessment: { methods, frequency }, adjustments: { guidance } } = generateStudyPlan?.personalizedStudyPlan;
             const [start, end] = extractFormattedDate(userProfile?.studyDuration);
-            const getShortDay = (fullDays: string[]): string[] => {
-                return fullDays.map(day => {
-                    const dayNumber = dayNameToNumber[day];
-                    return dayNumber !== undefined ? dayjs().day(dayNumber).format("ddd") : day;
-                });
-            };
 
             const newData = {
                 topic: topicOverview?.topic,
@@ -133,7 +126,12 @@ const AddPlannerPage = () => {
             return;
         } else {
             const prompt = generateAiPrompt(formDate);
-            dispatch(getGenerateStudyPlan(prompt));
+            const data  = {
+                ...formDate,
+                userId: userInfo?.id || '',
+                schedule: formDate?.schedule ? getShortDay(formDate.schedule) : []
+            }
+            userInfo?.id && dispatch(getGenerateStudyPlan(prompt, data));
         }
     }
     return (

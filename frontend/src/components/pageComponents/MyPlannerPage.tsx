@@ -9,13 +9,11 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import { AppDispatch, deleteStudyPlan, getStudyPlanInfo, getStudyPlanList, RootState } from "../../store";
 import { DataListType } from "../../types";
 
-import { DeleteIcon } from "../../icons/DeleteIcon"
 import Badge from "../baseComponents/Badge";
 import CardLoader from "../../skeletonLoaders/CardLoader";
 import Modal from "../baseComponents/Modal";
 import Button from "../baseComponents/Button";
-import ClockIcon from "../../icons/ClockIcon";
-import CalendarIcon from "../../icons/CalendarIcon";
+import { CalendarIcon, ClockIcon, DeleteIcon } from "../../icons";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(weekday);
@@ -104,7 +102,7 @@ const MyPlannerPage = () => {
                                             )
                                         })
                                     }
-                                </div> : userInfo?.id ? <div className="text-gray-500 text-center py-4">No study plans have been added yet</div> : <div className="text-gray-500 text-center py-4">You must be logged in to add a study plan. Please log in to continue.</div>
+                                </div> : userInfo?.id ? <div className="text-gray-500 text-center p-4 md:px-0">No study plans have been added yet</div> : <div className="text-gray-500 text-center p-4 md:px-0">You must be logged in to add a study plan. Please log in to continue.</div>
                         }
                     </>
             }

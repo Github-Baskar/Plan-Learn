@@ -73,3 +73,8 @@ export type InfoDataType = {
     };
     studyPlanStatus: string;
 }
+
+export type ApiErrorResponse = {
+    message?: string;
+    exception?: string;
+}

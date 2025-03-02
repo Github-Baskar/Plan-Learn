@@ -1,4 +1,4 @@
-const CheckBoxIcon = () => {
+export const CheckBoxIcon = () => {
     return (
         <svg
             fill="none"
@@ -22,5 +22,3 @@ const CheckBoxIcon = () => {
         </svg>
     )
 }
-
-export default CheckBoxIcon

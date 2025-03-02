@@ -8,7 +8,7 @@ import NavMenuList from "./NavMenuList";
 
 import Button from "../baseComponents/Button";
 import ProfileLogo from "../baseComponents/ProfileLogo";
-import MenuIcon from "../../icons/MenuIcon";
+import { MenuIcon } from "../../icons";
 
 const Header = () => {
     const navigate = useNavigate();

@@ -2,7 +2,7 @@ type AuthIconProps = {
     className: string;
 }
 
-const AuthIcon = ({
+export const AuthIcon = ({
     className,
 }: AuthIconProps) => {
     return (
@@ -8376,5 +8376,3 @@ const AuthIcon = ({
         </svg>
     )
 }
-
-export default AuthIcon

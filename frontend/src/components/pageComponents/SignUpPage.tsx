@@ -10,9 +10,7 @@ import { SignUpErrorMsgType } from "../../types";
 import { formatLabel, validateForm } from "../../utilities/commonFunction";
 
 import Button from "../baseComponents/Button";
-import { GoogleIcon } from "../../icons/GoogleIcon";
-import { EyeOpenIcon } from "../../icons/EyeOpenIcon";
-import { EyeCloseIcon } from "../../icons/EyeCloseIcon";
+import { EyeCloseIcon, EyeOpenIcon, GoogleIcon } from "../../icons";
 
 const SignUpPage = () => {
     const dispatch = useDispatch<AppDispatch>();

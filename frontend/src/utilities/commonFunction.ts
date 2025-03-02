@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { dayNameToNumber } from "./constants";
 
 export const profileName = (name: string) => {
     let result = "";
@@ -63,10 +64,12 @@ export const convertToHoursAndMinutes = (time: string): string => {
 };
 
 export const extractFormattedDate = (dateString: string): string[] => {
-    const match = dateString.match(/(\w{3,} \d{1,2}, \d{4}|\d{4}-\d{2}-\d{2})/g);
-    if (!match || match.length < 2) return [];
-    return match.map(
-        date => dayjs(date, [
+    const match = dateString.match(/(\d{1,2}-\d{1,2}-\d{4}|\w{3,} \d{1,2}, \d{4}|\d{4}-\d{2}-\d{2})/g);
+    if (!match) return [];
+
+    return match.map(date =>
+        dayjs(date, [
+            "DD-MM-YYYY", // Added for "01-03-2025" format
             "MMMM D, YYYY",
             "MMM D, YYYY",
             "YYYY-MM-DD",
@@ -74,4 +77,11 @@ export const extractFormattedDate = (dateString: string): string[] => {
             "D MMM YYYY",
         ]).format("MMM D, YYYY")
     );
+};
+
+export const getShortDay = (fullDays: string[]): string[] => {
+    return fullDays.map(day => {
+        const dayNumber = dayNameToNumber[day];
+        return dayNumber !== undefined ? dayjs().day(dayNumber).format("ddd") : day;
+    });
 };

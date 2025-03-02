@@ -2,7 +2,7 @@ type CalendarIconProps = {
     className?: string,
 }
 
-const CalendarIcon = ({
+export const CalendarIcon = ({
     className
 }: CalendarIconProps) => {
     return (
@@ -22,5 +22,3 @@ const CalendarIcon = ({
         </svg>
     )
 }
-
-export default CalendarIcon
