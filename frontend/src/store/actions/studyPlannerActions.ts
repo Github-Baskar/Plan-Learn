@@ -8,24 +8,26 @@ import { PlannerResponseDataType } from "../../types";
 import { getAddStudyPlanConfig, getStudyPlanInfoConfig, getStudyPlanListConfig, getStudyPlanOverLappingConfig } from "../../lib/requests/studyPlanner";
 import { AppDispatch, getGenerateStudyPlanDispatch, getStudyPlanInfoDispatch, getStudyPlanListDispatch, RootState, setAddPlanLoading, setGenerateStudyPlanLoading, setStudyPlanInfoLoading, setStudyPlanListLoading } from "..";
 
-export const getGenerateStudyPlan = (ai_prompt: string, formDate: { dateRange: string[], schedule: string[], timeRange: string[], userId: string }) => {
+export const getGenerateStudyPlan = (ai_prompt: string, formDate: { dateRange: string[], schedule: string[], timeRange: string[], userId: string | null }) => {
     return async (dispatch: AppDispatch) => {
         dispatch(setGenerateStudyPlanLoading(true));
         try {
-            const data = {
-                userId: formDate.userId,
-                dateRange: formDate.dateRange,
-                schedule: formDate.schedule,
-                timeRange: formDate.timeRange,
+            if (formDate.userId) {
+                const data = {
+                    userId: formDate.userId,
+                    dateRange: formDate.dateRange,
+                    schedule: formDate.schedule,
+                    timeRange: formDate.timeRange,
+                }
+                const isOverlapping = await isStudyPlanOverLapping(data);
+                if (isOverlapping) {
+                    return;
+                }
             }
-            if (await isStudyPlanOverLapping(data)) {
-                return;
-            } else {
-                const result = await chatSession.sendMessage(ai_prompt);
-                const response = result.response.text();
-                dispatch(getGenerateStudyPlanDispatch(JSON.parse(response)));
-                toast.success("Study plan generated successfully");
-            }
+            const result = await chatSession.sendMessage(ai_prompt);
+            const response = result.response.text();
+            dispatch(getGenerateStudyPlanDispatch(JSON.parse(response)));
+            toast.success("Study plan generated successfully");
         } catch (error) {
             toast.error(getError(error));
         } finally {

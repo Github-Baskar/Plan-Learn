@@ -3,6 +3,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import MasterLayout from './MasterLayout';
+import ScrollToTop from './components/baseComponents/ScrollToTop';
 import HomePage from './components/pageComponents/HomePage';
 import MyPlannerPage from './components/pageComponents/MyPlannerPage';
 import AddPlannerPage from './components/pageComponents/AddPlannerPage';
@@ -13,6 +14,7 @@ import PlannerInfoPage from './components/pageComponents/PlannerInfoPage';
 function App() {
     return (
         <Router>
+            <ScrollToTop />
             <Routes>
                 <Route path='/sign-in' element={<SignInPage />} />
                 <Route path='/sign-up' element={<SignUpPage />} />

@@ -126,12 +126,12 @@ const AddPlannerPage = () => {
             return;
         } else {
             const prompt = generateAiPrompt(formDate);
-            const data  = {
+            const data = {
                 ...formDate,
-                userId: userInfo?.id || '',
+                userId: userInfo?.id || null,
                 schedule: formDate?.schedule ? getShortDay(formDate.schedule) : []
             }
-            userInfo?.id && dispatch(getGenerateStudyPlan(prompt, data));
+            dispatch(getGenerateStudyPlan(prompt, data));
         }
     }
     return (
