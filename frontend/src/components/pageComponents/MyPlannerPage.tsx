@@ -102,7 +102,7 @@ const MyPlannerPage = () => {
                                             )
                                         })
                                     }
-                                </div> : userInfo?.id ? <div className="text-gray-500 text-center p-4 md:px-0">No study plans have been added yet</div> : <div className="text-gray-500 text-center p-4 md:px-0">You must be logged in to add a study plan. Please log in to continue.</div>
+                                </div> : userInfo?.id ? <div className="text-gray-500 text-center p-4 md:px-0">No study plans have been added yet</div> : <div className="text-gray-500 text-center p-4 md:px-0">You must be signed in to add a study plan. Please sign in to continue.</div>
                         }
                     </>
             }
